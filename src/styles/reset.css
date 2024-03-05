@@ -1,0 +1,94 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600;700;800;900&family=Roboto:wght@300;700&display=swap');
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+* {
+	margin: 0;
+	scroll-behavior: smooth;
+}
+body {
+	line-height: 1.5;
+	-webkit-font-smoothing: antialiased;
+	font-family: 'Noto Sans';
+	overflow: hidden auto;
+}
+img,
+picture,
+video,
+canvas,
+svg {
+	display: block;
+	max-width: 100%;
+}
+input,
+button,
+textarea,
+select {
+	font: inherit;
+}
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	overflow-wrap: break-word;
+}
+a,
+button {
+	text-decoration: none;
+}
+span {
+	color: inherit;
+	font-size: inherit;
+}
+#root,
+#__next {
+	/* isolation: isolate; */
+}
+
+body::-webkit-scrollbar {
+	display: none;
+}
+
+body {
+	-ms-overflow-style: none;
+	scrollbar-width: none;
+}
+
+.ScrollbarWhite::-webkit-scrollbar {
+	width: 5px;
+}
+
+.ScrollbarWhite::-webkit-scrollbar-track {
+	background: rgba(255, 255, 255, 0.5);
+}
+
+.ScrollbarWhite::-webkit-scrollbar-thumb {
+	background-color: #ffffff;
+}
+
+.ScrollbarWhite {
+	scrollbar-color: #ffffff rgba(255, 255, 255, 0.5);
+}
+
+.ScrollbarOrange::-webkit-scrollbar {
+	width: 5px;
+}
+
+.ScrollbarOrange::-webkit-scrollbar-track {
+	background: #e06b00;
+}
+
+.ScrollbarOrange::-webkit-scrollbar-thumb {
+	background-color: #1b170f;
+}
+
+.ScrollbarOrange {
+	scrollbar-color: #1b170f #e06b00;
+}
+

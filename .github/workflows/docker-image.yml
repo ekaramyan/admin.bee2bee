@@ -1,0 +1,34 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: ['main']
+  pull_request:
+    branches: ['main']
+
+jobs:
+  build-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.B2B_GITHUB_TOKEN }}
+      - name: Build the hello-docker Docker image
+        env:
+          API_TOKEN: ${{ secrets.API_TOKEN }}
+          API_URL: ${{ secrets.API_URL }}
+          CAPTCHA_KEY: ${{secrets.CAPTCHA_KEY}}
+        run: |
+          docker build --build-arg API_TOKEN=${{ secrets.API_TOKEN }} --build-arg API_URL=${{ secrets.API_URL }} --build-arg CAPTCHA_KEY=${{ secrets.CAPTCHA_KEY }} . --tag ghcr.io/ekaramyan/bee2bee:latest
+          docker push ghcr.io/ekaramyan/bee2bee:latest
+      - uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          script: |
+            bash ~/bootstrap.sh nextjs
