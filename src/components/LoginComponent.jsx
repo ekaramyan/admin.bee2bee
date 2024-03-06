@@ -18,14 +18,12 @@ import { useRouter } from 'next/router'
 import useLogin from '@/hooks/useLogin'
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
-import ReCAPTCHA from 'react-google-recaptcha'
 const AuthButton = dynamic(() => import('./UI/AuthButton'))
 import Link from 'next/link'
 
 export default function LoginComponent() {
 	const captchaKey = process.env.CAPTCHA_KEY
 	const { login, loading, error, success } = useLogin()
-	const [captchaValue, setCaptchaValue] = useState(null)
 	const [err, setError] = useState(null)
 	const handleCaptchaChange = value => {
 		setCaptchaValue(value)
@@ -41,10 +39,6 @@ export default function LoginComponent() {
 			client_id: '',
 			client_secret: '',
 		}
-		// if (!captchaValue) {
-		// 	setError('Please pass captcha first')
-		// 	return
-		// }
 		login(formData)
 		if (success) {
 			router.push('/cells')
@@ -171,14 +165,6 @@ export default function LoginComponent() {
 							justifyContent: 'center',
 						}}
 					>
-						<div style={{ transform: 'scale(0.8)' }}>
-							<ReCAPTCHA
-								sitekey={captchaKey}
-								theme='light'
-								size='normal'
-								onChange={handleCaptchaChange}
-							/>
-						</div>
 					</Grid>
 
 					<Grid
