@@ -27,7 +27,6 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff'
 import { useState } from 'react'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
-import ReCAPTCHA from 'react-google-recaptcha'
 import useRegister from '@/hooks/useRegister'
 const AuthButton = dynamic(() => import('./UI/AuthButton'))
 import countryList from '@/countryList'
@@ -479,14 +478,6 @@ export default function RegisterComponent() {
 							justifyContent: 'center',
 						}}
 					>
-						<div style={{ transform: 'scale(0.8)' }}>
-							<ReCAPTCHA
-								sitekey={captchaKey}
-								theme='light'
-								size='normal'
-								onChange={handleCaptchaChange}
-							/>
-						</div>
 					</Grid>
 
 					<Grid

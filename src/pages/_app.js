@@ -14,12 +14,6 @@ function MyApp({ Component, pageProps }) {
 			<Head>
 				<title>Bee2Bee</title>
 				<link rel='icon' href={favicon.src} />
-				<script
-					src='https://www.google.com/recaptcha/api.js'
-					data-sitekey={captchaKey}
-					async
-					defer
-				></script>
 				<meta
 					name='description'
 					content='Bee2Bee: Opportunities for everyone. Connect, collaborate, and grow together in the business world.'

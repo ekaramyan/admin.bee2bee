@@ -15,7 +15,6 @@ import DriveFileRenameOutlineOutlinedIcon from '@mui/icons-material/DriveFileRen
 import SubjectOutlinedIcon from '@mui/icons-material/SubjectOutlined'
 import { useState } from 'react'
 import dynamic from 'next/dynamic'
-import ReCAPTCHA from 'react-google-recaptcha'
 import Wrapper from '@/components/UI/Wrapper'
 import useContact from '@/hooks/useContact'
 const AuthButton = dynamic(() => import('@/components/UI/AuthButton'))
@@ -292,14 +291,6 @@ export default function Contacts() {
 										justifyContent: 'center',
 									}}
 								>
-									<div style={{ transform: 'scale(0.8)' }}>
-										<ReCAPTCHA
-											sitekey={captchaKey}
-											theme='light'
-											size='normal'
-											onChange={handleCaptchaChange}
-										/>
-									</div>
 								</Grid>
 								<Grid
 									item
