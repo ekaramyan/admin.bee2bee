@@ -19,10 +19,9 @@ jobs:
           password: ${{ secrets.B2B_GITHUB_TOKEN }}
       - name: Build the hello-docker Docker image
         env:
-          API_TOKEN: ${{ secrets.PRERELEASE_API_TOKEN }}
           API_URL: ${{ secrets.PRERELEASE_API_URL }}
         run: |
-          docker build --build-arg API_TOKEN=${{ secrets.PRERELEASE_API_TOKEN }} --build-arg API_URL=${{ secrets.PRERELEASE_API_URL }} --build-arg . --tag ghcr.io/ekaramyan/admin.bee2bee:latest
+          docker build API_URL=${{ secrets.PRERELEASE_API_URL }} --build-arg . --tag ghcr.io/ekaramyan/admin.bee2bee:latest
           docker push ghcr.io/ekaramyan/admin.bee2bee:latest
       - uses: appleboy/ssh-action@master
         with:
