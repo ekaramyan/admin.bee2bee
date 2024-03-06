@@ -8,13 +8,8 @@ import { useRouter } from 'next/router'
 import dynamic from 'next/dynamic'
 const Confetti = dynamic(() => import('react-confetti'))
 const Cell = dynamic(() => import('../components/UI/Cell'))
-import starter from '@/assets/img/bees/starter.webp'
-import beginner from '@/assets/img/bees/beginner.webp'
-import worker from '@/assets/img/bees/worker.webp'
-import pro from '@/assets/img/bees/pro.webp'
-import expert from '@/assets/img/bees/expert.webp'
 
-export default function JoinCell() {
+export default function Cells() {
 	const [birthday, setBirthday] = useState(null)
 	const [data, setData] = useState(null)
 	const [showConfetti, setShowConfetti] = useState(false)
@@ -66,17 +61,9 @@ export default function JoinCell() {
 		return () => clearInterval(timer)
 	}, [])
 
-	const cells = [
-		{ bee: starter },
-		{ bee: beginner },
-		{ bee: worker },
-		{ bee: pro },
-		{ bee: expert },
-	]
-
 	return (
 		<Wrapper
-			header={'Join the cell'}
+			header={'Cells'}
 			style={{
 				minHeight: 760,
 				maxHeight: isMobile ? '80dvh' : 'none',
@@ -113,13 +100,6 @@ export default function JoinCell() {
 				{data?.map((cell, index) => (
 					<Cell
 						key={cell?.id}
-						bee={cells[index].bee}
-						join={cell.id}
-						canJoin={cell.canJoin}
-						level={cell?.level}
-						price={cell?.price}
-						index={index}
-						onJoinClick={() => router.push(cell.id)}
 						style={{
 							flexBasis: '33.33%',
 							maxWidth: '33.33%',

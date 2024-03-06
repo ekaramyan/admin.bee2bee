@@ -3,9 +3,9 @@
 	"version": "0.1.0",
 	"private": true,
 	"scripts": {
-		"dev": "next dev",
+		"dev": "next dev -p 3001",
 		"build": "next build",
-		"start": "next start",
+		"start": "next start -p 3001",
 		"lint": "next lint"
 	},
 	"dependencies": {
@@ -37,8 +37,9 @@
 		"swr": "^2.2.4"
 	},
 	"devDependencies": {
-		"webpack-bundle-analyzer": "^4.9.1",
+		"@types/js-cookie": "^3.0.6",
 		"eslint": "8.41.0",
-		"eslint-config-next": "13.4.4"
+		"eslint-config-next": "13.4.4",
+		"webpack-bundle-analyzer": "^4.9.1"
 	}
 }
