@@ -28,14 +28,14 @@ export default function MainPage() {
 					margin: isMobile ? '0' : '0 auto',
 				}}
 			>
-				<Image
+				{/* <Image
 					src={main.src}
 					alt='main page'
 					width={isMobile ? 245 : 600}
 					height={isMobile ? 218 : 530}
 				/>
 				<Typography variant='main_head'>BEE2BEE</Typography>
-				<Typography variant='main_bottom_highlight'> ADMIN</Typography>
+				<Typography variant='main_bottom_highlight'> ADMIN</Typography> */}
 			</div>
 		</div>
 	)
