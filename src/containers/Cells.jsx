@@ -9,6 +9,7 @@ import {
 	FormGroup,
 	FormControlLabel,
 	Switch,
+	Box,
 } from '@mui/material'
 import { useRouter } from 'next/router'
 import dynamic from 'next/dynamic'
@@ -24,7 +25,11 @@ export default function Cells() {
 	useEffect(() => {
 		const fetchDataAsync = async () => {
 			try {
-				const response = await fetchData(`${url}/cells/v2/all/list`, token)
+				const response = await fetchData(
+					`${url}/cells/v2/all/list?page=100&limit=1
+					`,
+					token
+				)
 				setData(response.data)
 			} catch (err) {
 				console.error(err)
@@ -39,7 +44,7 @@ export default function Cells() {
 	return (
 		<Wrapper
 			header={
-				<>
+				<Box style={{ display: 'flex', alignItems: 'center', gap: 15 }}>
 					Cells
 					<FormGroup>
 						<FormControlLabel
@@ -47,7 +52,7 @@ export default function Cells() {
 							label='active'
 						/>
 					</FormGroup>
-				</>
+				</Box>
 			}
 			style={{
 				minHeight: 760,
@@ -63,9 +68,7 @@ export default function Cells() {
 					alignItems: 'center',
 					justifyContent: 'center',
 					flexWrap: 'wrap',
-					// alignContent: 'center',
 					gap: isMobile ? 10 : '25px 0px',
-					// userSelect: 'none',
 				}}
 			>
 				{data?.map((cell, index) => (
