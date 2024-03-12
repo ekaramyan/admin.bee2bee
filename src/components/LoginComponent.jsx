@@ -22,12 +22,9 @@ const AuthButton = dynamic(() => import('./UI/AuthButton'))
 import Link from 'next/link'
 
 export default function LoginComponent() {
-	const captchaKey = process.env.CAPTCHA_KEY
 	const { login, loading, error, success } = useLogin()
 	const [err, setError] = useState(null)
-	const handleCaptchaChange = value => {
-		setCaptchaValue(value)
-	}
+
 	const router = useRouter()
 	const handleSubmit = async event => {
 		event.preventDefault()
@@ -41,7 +38,7 @@ export default function LoginComponent() {
 		}
 		login(formData)
 		if (success) {
-			router.push('/cells')
+			router.push('/users')
 		}
 	}
 	const [showPassword, setShowPassword] = useState(false)
@@ -164,8 +161,7 @@ export default function LoginComponent() {
 							display: 'flex',
 							justifyContent: 'center',
 						}}
-					>
-					</Grid>
+					></Grid>
 
 					<Grid
 						item

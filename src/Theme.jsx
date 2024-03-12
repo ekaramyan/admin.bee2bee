@@ -83,12 +83,15 @@ const theme = createTheme({
 		fontFamily: 'Noto Sans',
 		fontSize: 20,
 		allVariants: {
-			cursor: 'default',
+			cursor: 'pointer',
 			fontSize: 20,
 			fontWeight: 300,
 			color: '#241f55',
 			lineHeight: 1.55,
 			zIndex: 2,
+		},
+		secondary: {
+			color: '#fff',
 		},
 		auth: {},
 	},

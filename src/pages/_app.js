@@ -8,7 +8,6 @@ import store from '@/store'
 import favicon from '@/assets/img/favicon.webp'
 
 function MyApp({ Component, pageProps }) {
-	const captchaKey = process.env.CAPTCHA_KEY
 	return (
 		<>
 			<Head>

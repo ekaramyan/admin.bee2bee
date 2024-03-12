@@ -11,7 +11,7 @@ export async function getServerSideProps(context) {
 	const { req, query } = context
 	const token = req.cookies.access_token
 	const apiUrl = process.env.API_URL
-	const url = `${apiUrl}/users?limit=100&page=1`
+	const url = `${apiUrl}/users?limit=25&page=1`
 
 	const usersProps = await universalServerSideProps(url, token, 'users')
 

@@ -2,9 +2,7 @@ import { useMediaQuery, Box } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
 import { useState } from 'react'
 import dynamic from 'next/dynamic'
-import CelebrationTimer from './UI/CelebrationTimer'
 const Logo = dynamic(() => import('./UI/Logo'))
-const Socials = dynamic(() => import('./UI/Socials'))
 const UserMenu = dynamic(() => import('./UI/UserMenu'))
 const BurgerMenu = dynamic(() => import('./UI/BurgerMenu'))
 
@@ -40,15 +38,8 @@ export default function Header({ loggedIn }) {
 			>
 				<Box style={{ display: 'flex', alignItems: 'center', gap: 25 }}>
 					<Logo />
-					{/* <CelebrationTimer /> */}
 				</Box>
-				{loggedIn ? (
-					<UserMenu />
-				) : (
-					<div>
-						<Socials width={isMobile ? 30 : 40} height={isMobile ? 30 : 40} />
-					</div>
-				)}
+				{loggedIn ? <UserMenu /> : <></>}
 				{!loggedIn && isMobile && (
 					<>
 						<MenuIcon onClick={toggleBurgerMenu} />

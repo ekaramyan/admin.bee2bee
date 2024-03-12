@@ -6,26 +6,24 @@ import dynamic from 'next/dynamic'
 import Header from '../../components/Header'
 import Footer from '../../components/Footer'
 import AuthButton from './AuthButton'
-const Login = dynamic(() => import('../Login'))
-const Register = dynamic(() => import('../Register'))
 const MyCells = dynamic(() => import('../../components/MyCells'))
 const RealCells = dynamic(() => import('../../components/RealCells'))
 const SideModal = dynamic(() => import('./SideModal'))
 import background from '../../assets/img/background.webp'
 
 const IndexWrapper = ({ children, ...props }) => {
-	const [isLoginOpen, setIsLoginOpen] = useState(false)
-	const [isRegisterOpen, setIsRegisterOpen] = useState(false)
+	const [isLeftModalOpen, setIsLefModalOpen] = useState(false)
+	const [isRightModalOpen, setIsRightModalOpen] = useState(false)
 	const router = useRouter()
 	const loggedIn = useSelector(state => state.user.loggedIn)
 	const isMobile = useMediaQuery('@media(max-width: 1300px)')
 	const isLow = useMediaQuery('@media(min-height: 880px)')
 
-	const toggleLogin = () => {
-		setIsLoginOpen(!isLoginOpen)
+	const toggleLeftModal = () => {
+		setIsLefModalOpen(!isLeftModalOpen)
 	}
-	const toggleRegister = () => {
-		setIsRegisterOpen(!isRegisterOpen)
+	const toggleRightModal = () => {
+		setIsRightModalOpen(!isRightModalOpen)
 	}
 
 	return (
@@ -95,34 +93,34 @@ const IndexWrapper = ({ children, ...props }) => {
 										right: 0,
 										bottom: 0,
 										backgroundColor:
-											isLoginOpen || isRegisterOpen
+											isLeftModalOpen || isRightModalOpen
 												? 'rgba(0, 0, 0, 0.2)'
 												: 'transparent',
 										transition: 'all .3s',
 										pointerEvents:
-											isLoginOpen || isRegisterOpen ? 'auto' : 'none',
+											isLeftModalOpen || isRightModalOpen ? 'auto' : 'none',
 										zIndex: 9,
 									}}
 									onClick={() => {
-										setIsLoginOpen(false)
-										setIsRegisterOpen(false)
+										setIsLefModalOpen(false)
+										setIsRightModalOpen(false)
 									}}
 								></div>
 								<SideModal
-									isLoginOpen={isLoginOpen}
-									isRegisterOpen={isRegisterOpen}
+									isLoginOpen={isLeftModalOpen}
+									isRegisterOpen={isRightModalOpen}
 									isRight={false}
 								>
-									<MyCells toggleOpen={toggleLogin} isLoginOpen={isLoginOpen} />
+									<MyCells toggleOpen={toggleLeftModal} isLoginOpen={isLeftModalOpen} />
 								</SideModal>
 								<SideModal
-									isLoginOpen={isLoginOpen}
-									isRegisterOpen={isRegisterOpen}
+									isLoginOpen={isLeftModalOpen}
+									isRegisterOpen={isRightModalOpen}
 									isRight={true}
 								>
 									<RealCells
-										toggleOpen={toggleRegister}
-										isRegisterOpen={isRegisterOpen}
+										toggleOpen={toggleRightModal}
+										isRegisterOpen={isRightModalOpen}
 									/>
 								</SideModal>
 							</>
