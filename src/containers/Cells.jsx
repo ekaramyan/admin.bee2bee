@@ -26,7 +26,7 @@ export default function Cells() {
 		const fetchDataAsync = async () => {
 			try {
 				const response = await fetchData(
-					`${url}/cells/v2/all/list?page=100&limit=1
+					`${url}/cells/v2/all/list?page=1&limit=100
 					`,
 					token
 				)
