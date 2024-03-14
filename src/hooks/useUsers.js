@@ -38,5 +38,13 @@ export default function useUsers() {
 		}
 	}
 
+	const editUser = (id) =>{
+
+	}
+
+	const deleteUser = (id) =>{
+		
+	}
+
 	return { data, loading, error, success, getUsers }
 }

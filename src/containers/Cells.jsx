@@ -81,11 +81,13 @@ export default function Cells() {
 			style={{
 				minHeight: 760,
 				maxHeight: isMobile ? '80dvh' : 'none',
-				overflow: 'auto',
 			}}
 		>
 			<Box
-				style={{ display: 'flex', gap: 5, scrollbarColor: '#bc5a00 #f17d15' }}
+				style={{
+					display: 'flex',
+					gap: 5,
+				}}
 			>
 				{levels?.map(level => (
 					<OutlinedButton
@@ -109,6 +111,8 @@ export default function Cells() {
 					justifyContent: 'center',
 					flexWrap: 'wrap',
 					gap: isMobile ? 10 : '25px 0px',
+					overflow: 'auto',
+					scrollbarColor: '#bc5a00 #f17d15',
 				}}
 			>
 				{loading ? (
