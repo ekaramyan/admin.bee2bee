@@ -32,43 +32,42 @@ export default function Users({ header }) {
 	console.log(data)
 
 	return (
-		<Box
+		<Wrapper
+			header={header}
+			totalPages={data?.total_pages}
+			currentPage={data?.current_page}
+			onPageChange={onPageChange}
+			handleLimitChange={handleLimitChange}
+			selectedLimit={limit}
 			style={{
-				display: 'flex',
-				alignItems: 'center',
-				justifyContent: 'center',
-				height: '100%',
-				width: '100%',
+				minHeight: 760,
+				maxHeight: isMobile ? '80dvh' : 'none',
 			}}
 		>
-			<Wrapper
-				header={header}
-				totalPages={data?.total_pages}
-				currentPage={data?.current_page}
-				onPageChange={onPageChange}
-				handleLimitChange={handleLimitChange}
-				selectedLimit={limit}
+			<Box
 				style={{
-					minHeight: 760,
-					maxHeight: isMobile ? '80dvh' : 'none',
-					overflow: 'auto',
+					height: '100%',
+					overflowY: loading ? 'none' : 'auto',
+					padding: '10px',
+					scrollbarColor: '#bc5a00 #f17d15',
 				}}
 			>
-				<Box
-					style={{
-						maxHeight: '100%',
-						overflowY: 'auto',
-						padding: '10px',
-						scrollbarColor: '#bc5a00 #f17d15',
-					}}
-				>
-					{loading ? (
+				{loading ? (
+					<Box
+						style={{
+							display: 'flex',
+							alignItems: 'center',
+							justifyContent: 'center',
+							width: '100%',
+							height: '100%',
+						}}
+					>
 						<CircularProgress size={72} />
-					) : (
-						<TableComponent users={data?.data} />
-					)}
-				</Box>
-			</Wrapper>
-		</Box>
+					</Box>
+				) : (
+					<TableComponent users={data?.data} />
+				)}{' '}
+			</Box>
+		</Wrapper>
 	)
 }
