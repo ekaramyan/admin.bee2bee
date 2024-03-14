@@ -16,7 +16,7 @@ export default function TableComponent({ users }) {
 				</TableRow>
 			</TableHead>
 			<tbody>
-				{users.map((user, index) => (
+				{users?.map((user, index) => (
 					<TableItem key={index} item={user} />
 				))}
 			</tbody>

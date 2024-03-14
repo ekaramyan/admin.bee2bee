@@ -1,4 +1,4 @@
-import useCells from '@/hooks/useCells'
+import useRealCells from '@/hooks/useRealCells'
 import { Box, Typography, useMediaQuery } from '@mui/material'
 import { useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
@@ -13,25 +13,25 @@ export default function MyCellsComponent({ isOpen }) {
 		loading: followerActiveLoading,
 		error: followerActiveError,
 		getCells: getFollowerActiveCells,
-	} = useCells()
+	} = useRealCells()
 	const {
 		data: followerInactiveData,
 		loading: followerInactiveLoading,
 		error: followerInactiveError,
 		getCells: getFollowerInactiveCells,
-	} = useCells()
+	} = useRealCells()
 	const {
 		data: leaderActiveData,
 		loading: leaderActiveLoading,
 		error: leaderActiveError,
 		getCells: getLeaderActiveCells,
-	} = useCells()
+	} = useRealCells()
 	const {
 		data: leaderInactiveData,
 		loading: leaderLoading,
 		error: leaderInactiveError,
 		getCells: getLeaderInactiveCells,
-	} = useCells()
+	} = useRealCells()
 
 	useEffect(() => {
 		getFollowerActiveCells('me_follower_active')

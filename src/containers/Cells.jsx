@@ -1,7 +1,5 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
-import Cookies from 'js-cookie'
-import { fetchData } from '@/api/fetchData'
 import Wrapper from '../components/UI/Wrapper'
 import {
 	Grid,
@@ -10,37 +8,56 @@ import {
 	FormControlLabel,
 	Switch,
 	Box,
+	CircularProgress,
+	Typography,
 } from '@mui/material'
 import { useRouter } from 'next/router'
 import dynamic from 'next/dynamic'
+import Cookies from 'js-cookie'
+import { fetchData } from '@/api/fetchData'
+import useCells from '@/hooks/useCells'
+import OutlinedButton from '@/components/UI/OutlinedButton'
 const Cell = dynamic(() => import('../components/UI/Cell'))
 
+const token = Cookies.get('access_token')
+const url = process.env.API_URL
+
 export default function Cells() {
-	const [data, setData] = useState(null)
+	const [active, setActive] = useState(true)
+	const [limit, setLimit] = useState(25)
+	const [levels, setLevels] = useState(null)
+	const [levelId, setLevelId] = useState(1)
 	const router = useRouter()
-	const token = Cookies.get('access_token')
-	const url = process.env.API_URL
 	const isMobile = useMediaQuery('@media(max-width:1300px)')
 
-	useEffect(() => {
-		const fetchDataAsync = async () => {
-			try {
-				const response = await fetchData(
-					`${url}/cells/v2/all/list?page=1&limit=100
-					`,
-					token
-				)
-				setData(response.data)
-			} catch (err) {
-				console.error(err)
-			}
+	const { data, loading, error, getCells } = useCells()
+
+	const fetchDataAsync = async ({
+		page = 1,
+		limit = limit,
+		active = active,
+		level = level,
+	}) => {
+		try {
+			await getCells(page, limit, active, level)
+			const response = await fetchData(`${url}/cell-levels`, token)
+			setLevels(response.data)
+		} catch (err) {
+			console.error(err)
 		}
+	}
 
-		fetchDataAsync()
-	}, [])
+	useEffect(() => {
+		fetchDataAsync({ page: 1, limit: limit, active: active, level: levelId })
+	}, [limit, active, levelId])
 
+	const handleLimitChange = limit => {
+		setLimit(limit)
+	}
+	const onPageChange = page => {
+		fetchDataAsync({ page, limit, active, level: levelId })
+	}
 	console.log(data)
-
 	return (
 		<Wrapper
 			header={
@@ -48,18 +65,41 @@ export default function Cells() {
 					Cells
 					<FormGroup>
 						<FormControlLabel
-							control={<Switch defaultChecked />}
+							control={
+								<Switch checked={active} onChange={() => setActive(!active)} />
+							}
 							label='active'
 						/>
 					</FormGroup>
 				</Box>
 			}
+			totalPages={data?.total_pages}
+			currentPage={data?.current_page}
+			onPageChange={onPageChange}
+			handleLimitChange={handleLimitChange}
+			selectedLimit={limit}
 			style={{
 				minHeight: 760,
 				maxHeight: isMobile ? '80dvh' : 'none',
 				overflow: 'auto',
 			}}
 		>
+			<Box
+				style={{ display: 'flex', gap: 5, scrollbarColor: '#bc5a00 #f17d15' }}
+			>
+				{levels?.map(level => (
+					<OutlinedButton
+						key={level.id}
+						title={level.level}
+						id={levelId}
+						level={level.id}
+						onClick={() => setLevelId(level.id)}
+					/>
+				))}
+			</Box>
+			<Typography variant=''>
+				Cells on level {levelId}: {data?.total}
+			</Typography>
 			<Grid
 				style={{
 					width: '100%',
@@ -71,20 +111,26 @@ export default function Cells() {
 					gap: isMobile ? 10 : '25px 0px',
 				}}
 			>
-				{data?.map((cell, index) => (
-					<Cell
-						key={cell?.id}
-						id={cell.id}
-						consultant={cell.consultant}
-						leader={cell.leader}
-						cellUsers={cell.cellUsers}
-						style={{
-							flexBasis: '33.33%',
-							maxWidth: '33.33%',
-							boxSizing: 'border-box',
-						}}
-					/>
-				))}
+				{loading ? (
+					<CircularProgress size={72} />
+				) : (
+					<>
+						{data?.data?.map((cell, index) => (
+							<Cell
+								key={cell?.id}
+								id={cell.id}
+								consultant={cell.consultant}
+								leader={cell.leader}
+								cellUsers={cell.cellUsers}
+								style={{
+									flexBasis: '33.33%',
+									maxWidth: '33.33%',
+									boxSizing: 'border-box',
+								}}
+							/>
+						))}
+					</>
+				)}
 			</Grid>
 		</Wrapper>
 	)

@@ -6,7 +6,6 @@ import { Edit } from '@mui/icons-material'
 export default function Cell({ id, consultant, leader, cellUsers }) {
 	const isMobile = useMediaQuery('@media(max-width: 1300px)')
 	const { firstName, lastName } = consultant
-	console.log(cellUsers)
 	return (
 		<Box
 			style={{
@@ -15,7 +14,7 @@ export default function Cell({ id, consultant, leader, cellUsers }) {
 				alignItems: 'center',
 				gap: 10,
 				minWidth: isMobile ? '100%' : '33.3%',
-				minHeight: '33vh',
+				minHeight: '37.9vh',
 				height: 300,
 				width: 'fit-content',
 				background: `url(${background.src})  center / contain no-repeat`,

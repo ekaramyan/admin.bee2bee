@@ -13,21 +13,15 @@ import Cookies from 'js-cookie'
 import { useEffect, useState } from 'react'
 import MenuIcon from '@mui/icons-material/Menu'
 import Image from 'next/image'
-import {
-	AccessTime,
-	QueryStats,
-	PersonOutline,
-	Dashboard,
-} from '@mui/icons-material'
+import { QueryStats, PersonOutline, Dashboard } from '@mui/icons-material'
 
 import BurgerMenu from './BurgerMenu'
 import logout from '@/assets/img/logout.svg'
 
-const tabs = ['users', 'cells', 'archive', 'stats']
+const tabs = ['users', 'cells', 'stats']
 const tabNames = {
 	users: 'users',
 	cells: 'cells',
-	archive: 'archive',
 	stats: 'stats',
 }
 
@@ -80,7 +74,6 @@ export default function UserMenu() {
 							>
 								{tab === 'users' && <PersonOutline />}
 								{tab === 'cells' && <Dashboard />}
-								{tab === 'archive' && <AccessTime />}
 								{tab === 'stats' && <QueryStats />}
 								{tabNames[tab]}
 							</Typography>

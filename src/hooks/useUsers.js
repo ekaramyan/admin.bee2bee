@@ -2,7 +2,7 @@ import axios from 'axios'
 import { useState } from 'react'
 import Cookies from 'js-cookie'
 
-export default function useCells() {
+export default function useUsers() {
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState(null)
 	const [success, setSuccess] = useState(false)
@@ -10,13 +10,11 @@ export default function useCells() {
 	const apiUrl = process.env.API_URL
 	const token = Cookies.get('access_token')
 
-	const getCells = async (page, limit, active, level) => {
+	const getUsers = async (page, limit) => {
 		setLoading(true)
 		setError(null)
 
-		const url = `${apiUrl}/cells/v2/all/list?page=${page}&limit=${limit}&is_active=${
-			active ? true : false
-		}&is_archived=${active ? false : true}&level_id=${level}`
+		const url = `${apiUrl}/users?page=${page}&limit=${limit}`
 
 		try {
 			const response = await axios.get(url, {
@@ -40,5 +38,5 @@ export default function useCells() {
 		}
 	}
 
-	return { data, loading, error, success, getCells }
+	return { data, loading, error, success, getUsers }
 }
