@@ -1,5 +1,5 @@
 import { Box, CircularProgress, useMediaQuery } from '@mui/material'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import Wrapper from '@/components/UI/Wrapper'
 import TableComponent from '@/components/TableComponent'
 import useUsers from '@/hooks/useUsers'
@@ -8,7 +8,14 @@ export default function Users({ header }) {
 	const [limit, setLimit] = useState(25)
 	const isMobile = useMediaQuery('@media(max-width:1300px)')
 
-	const { data, loading, error, getUsers } = useUsers()
+	const {
+		data: users,
+		loading: usersLoading,
+		error: usersError,
+		getUsers,
+	} = useUsers()
+	const { data, loading, success, error, deleteUser, editUser, getUserById } =
+		useUsers()
 
 	const fetchDataAsync = async ({ page = 1, limit = limit }) => {
 		try {
@@ -22,6 +29,12 @@ export default function Users({ header }) {
 		fetchDataAsync({ page: 1, limit: limit })
 	}, [limit])
 
+	// useEffect(() => {
+	// 	if (success || error) {
+	// 		fetchDataAsync({ page: 1, limit: limit })
+	// 	}
+	// }, [success, error])
+
 	const handleLimitChange = limit => {
 		setLimit(limit)
 	}
@@ -29,13 +42,11 @@ export default function Users({ header }) {
 		fetchDataAsync({ page, limit })
 	}
 
-	console.log(data)
-
 	return (
 		<Wrapper
 			header={header}
-			totalPages={data?.total_pages}
-			currentPage={data?.current_page}
+			totalPages={users?.total_pages}
+			currentPage={users?.current_page}
 			onPageChange={onPageChange}
 			handleLimitChange={handleLimitChange}
 			selectedLimit={limit}
@@ -47,12 +58,12 @@ export default function Users({ header }) {
 			<Box
 				style={{
 					height: '100%',
-					overflowY: loading ? 'none' : 'auto',
+					overflowY: usersLoading ? 'none' : 'auto',
 					padding: '10px',
 					scrollbarColor: '#bc5a00 #f17d15',
 				}}
 			>
-				{loading ? (
+				{usersLoading ? (
 					<Box
 						style={{
 							display: 'flex',
@@ -65,7 +76,13 @@ export default function Users({ header }) {
 						<CircularProgress size={72} />
 					</Box>
 				) : (
-					<TableComponent users={data?.data} />
+					<TableComponent
+						users={users?.data}
+						deleteUser={deleteUser}
+						editUser={editUser}
+						getUserById={getUserById}
+						loading={loading}
+					/>
 				)}{' '}
 			</Box>
 		</Wrapper>
