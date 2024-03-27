@@ -19,7 +19,12 @@ export default function EditModal({
 	handleClose,
 }) {
 	const handleChange = name => event => {
-		setFormData({ ...formData, [name]: event.target.value })
+		console.log(event.target.type)
+		if (event.target.type === 'checkbox') {
+			setFormData({ ...formData, [name]: event.target.checked })
+		} else {
+			setFormData({ ...formData, [name]: event.target.value })
+		}
 	}
 	useEffect(() => {
 		console.log(formData)
@@ -30,6 +35,7 @@ export default function EditModal({
 	}
 
 	const getInputField = (type, name) => {
+		console.log(type)
 		switch (type) {
 			case 'boolean':
 				return (
@@ -37,7 +43,7 @@ export default function EditModal({
 						style={{ width: '100%' }}
 						control={
 							<Checkbox
-								checked={formData[name] || false}
+								checked={Boolean(formData[name]) || false}
 								onChange={handleChange(name)}
 							/>
 						}
