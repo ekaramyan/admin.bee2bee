@@ -54,19 +54,20 @@ export default function TableComponent({
 		updateModalContent(actionType, id)
 		const { data } = await getUserById(id)
 		setFormData({
-			firstName: data?.firstName,
-			lastName: data?.lastName,
-			birth: data?.birth,
-			email: data?.email,
-			country: data?.country,
-			nickname: data?.nickname,
-			phone: data?.phone,
-			telegram: data?.telegram,
-			additionalEmail: data?.additionalEmail,
-			additionalTelegram: data?.additionalTelegram,
+			firstName: data?.firstName || '',
+			lastName: data?.lastName || '',
+			birth: data?.birth || '',
+			email: data?.email || '',
+			country: data?.country || '',
+			nickname: data?.nickname || '',
+			phone: data?.phone || '',
+			telegram: data?.telegram || '',
+			additionalEmail: data?.additionalEmail || '',
+			additionalTelegram: data?.additionalTelegram || '',
 			joinLimitBeginner: data?.joinLimitBeginner,
 			joinLimitWorker: data?.joinLimitWorker,
 			isBlocked: Boolean(data?.isBlocked),
+			isConfirmed: Boolean(data?.isConfirmed),
 		})
 		setEditModalOpen(true)
 	}

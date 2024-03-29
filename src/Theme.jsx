@@ -387,6 +387,17 @@ const theme = createTheme({
 			fontWeight: 700,
 			textTransform: 'uppercase',
 		},
+		outlined: {
+			color: '#1B170F',
+			fontFamily: 'Noto Sans',
+			fontSize: 16,
+			fontWeight: 400,
+			backgroundColor: '#fff',
+			padding: '16.5px 14px',
+			borderRadius: 4,
+			border: '1px solid #A5560F',
+			width: '100%',
+		},
 		join_cells_titles: {
 			color: '#fff',
 			fontFamily: 'Noto Sans',

@@ -67,7 +67,28 @@ export default function useUsers() {
 	}
 
 	const editUser = async (id, formData) => {
-		console.log(id, formData)
+		const url = `${apiUrl}/users/${id}`
+		setLoading(true)
+		setError(null)
+		try {
+			axios.patch(url, formData, {
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${token}`,
+				},
+			})
+			if (response.status === 200) {
+				setSuccess(true)
+				setData(response.data)
+				return response.data
+			} else {
+				setError('Failed to fetch the data.')
+			}
+		} catch (err) {
+			setError(err.message || 'Error occurred while fetching the data.')
+		} finally {
+			setLoading(false)
+		}
 	}
 
 	const deleteUser = async id => {

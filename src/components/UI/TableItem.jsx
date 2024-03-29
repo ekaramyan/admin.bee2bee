@@ -1,4 +1,5 @@
 import { TableRow, TableCell, Button } from '@mui/material'
+import { Delete, EditNote } from '@mui/icons-material'
 
 export default function TableItem({
 	item,
@@ -19,18 +20,18 @@ export default function TableItem({
 				<TableCell>{email}</TableCell>
 				<TableCell>{formattedLevels}</TableCell>
 				<TableCell>{cellCount}</TableCell>
-				<TableCell>
+				<TableCell style={{ display: 'flex', gap: 15 }}>
 					<Button
 						variant='outlined'
 						onClick={() => handleOpenEditModal(onEditClick, 'edit', id)}
 					>
-						Edit
+						<EditNote />
 					</Button>
 					<Button
 						variant='outlined'
 						onClick={() => handleOpenModal(onDeleteClick, 'delete', id)}
 					>
-						Delete
+						<Delete />
 					</Button>
 				</TableCell>
 			</TableRow>
