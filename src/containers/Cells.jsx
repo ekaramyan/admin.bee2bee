@@ -22,6 +22,16 @@ const Cell = dynamic(() => import('../components/UI/Cell'))
 
 const token = Cookies.get('access_token')
 const url = process.env.API_URL
+const acceptData = {
+	isAccepted: true,
+	acceptedAt: Date.now(),
+	isPayed: true,
+	payedAt: Date.now(),
+}
+const closeData = {
+	isActive: false,
+	isArchived: true,
+}
 
 export default function Cells() {
 	const [active, setActive] = useState(true)
@@ -29,9 +39,7 @@ export default function Cells() {
 	const [levels, setLevels] = useState(null)
 	const [levelId, setLevelId] = useState(1)
 	const [modalOpen, setModalOpen] = useState(false)
-	const [followerId, setFollowerId] = useState(null)
 	const [acceptedCount, setAcceptedCount] = useState(0)
-	const router = useRouter()
 	const isMobile = useMediaQuery('@media(max-width:1300px)')
 
 	const { data, loading, error, getCells } = useCells()
@@ -39,7 +47,29 @@ export default function Cells() {
 		data: cell,
 		loading: cellLoading,
 		error: cellError,
+		success: cellSuccess,
 		getCellById,
+	} = useCells()
+	const {
+		data: follower,
+		success: addSuccess,
+		loading: addFollowerLoading,
+		error: addFollowerError,
+		addFollower,
+	} = useCells()
+	const {
+		data: patchingData,
+		loading: patchingLoading,
+		error: patchingError,
+		success: patchingSuccess,
+		deleteFollower,
+		editFollower,
+	} = useCells()
+	const {
+		success: closeSuccess,
+		loading: closeLoading,
+		error: closeError,
+		closeCell,
 	} = useCells()
 
 	const fetchDataAsync = async ({
@@ -59,7 +89,7 @@ export default function Cells() {
 
 	useEffect(() => {
 		fetchDataAsync({ page: 1, limit: limit, active: active, level: levelId })
-	}, [limit, active, levelId])
+	}, [limit, active, levelId, modalOpen])
 
 	const handleLimitChange = limit => {
 		setLimit(limit)
@@ -71,6 +101,24 @@ export default function Cells() {
 	const onModalOpen = async id => {
 		await getCellById(id)
 		setModalOpen(true)
+	}
+
+	const refreshFetch = async id => {
+		await getCellById(id)
+	}
+	const onAddUserClick = async (cellId, id) => {
+		await addFollower(cellId, id)
+	}
+	const onDeleteUserClick = async id => {
+		await deleteFollower(id)
+	}
+	const onApproveClick = async id => {
+		await editFollower(id, acceptData)
+	}
+	const onCloseClick = async id => {
+		const result = await closeCell(id, closeData)
+		result.isSuccess && setModalOpen(false)
+		refreshFetch(id)
 	}
 
 	return (
@@ -163,15 +211,23 @@ export default function Cells() {
 					handleClose={() => {
 						setModalOpen(false)
 					}}
-					id={cell.data.id}
+					refreshFetch={refreshFetch}
 					cellData={cell.data}
 					setAcceptedCount={setAcceptedCount}
 					acceptedCount={acceptedCount}
-					handleConfirm={null}
-					formData={null}
-					setFormData={null}
-					followerId={followerId}
-					setFollowerId={setFollowerId}
+					addSuccess={addSuccess}
+					addFollowerLoading={addFollowerLoading}
+					addFollowerError={addFollowerError}
+					onApproveClick={onApproveClick}
+					patchingSuccess={patchingSuccess}
+					patchingLoading={patchingLoading}
+					patchingError={patchingError}
+					onAddUserClick={onAddUserClick}
+					onDeleteUserClick={onDeleteUserClick}
+					closeSuccess={closeSuccess}
+					closeLoading={closeLoading}
+					closeError={closeError}
+					closeCell={onCloseClick}
 					title={`Editing cell #${cell.data.id}`}
 					isLoading={loading}
 				/>

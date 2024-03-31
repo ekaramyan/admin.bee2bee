@@ -9,6 +9,10 @@ export default function useCells() {
 	const [data, setData] = useState(null)
 	const apiUrl = process.env.API_URL
 	const token = Cookies.get('access_token')
+	const headers = {
+		'Content-Type': 'application/json',
+		Authorization: `Bearer ${token}`,
+	}
 
 	const getCells = async (page, limit, active, level) => {
 		setLoading(true)
@@ -88,10 +92,11 @@ export default function useCells() {
 	}
 
 	const addFollower = async (cellId, followerId) => {
+		console.log(cellId, followerId)
 		setLoading(true)
 		try {
 			const response = await axios.post(
-				`${baseCellUrl}/${cellId}/follower/${followerId}`,
+				`${apiUrl}/cells/${cellId}/follower/${followerId}`,
 				{},
 				{
 					headers: { Authorization: `Bearer ${token}` },
@@ -115,7 +120,6 @@ export default function useCells() {
 				setError('Error while joining the cell.')
 			}
 		} finally {
-			dispatch({ type: 'JOIN' })
 			setLoading(false)
 		}
 	}
@@ -149,7 +153,7 @@ export default function useCells() {
 	const closeCell = async (cellId, data) => {
 		setLoading(true)
 		try {
-			const response = await axios.patch(`${baseCellUrl}/${cellId}`, data, {
+			const response = await axios.patch(`${apiUrl}/cells/${cellId}`, data, {
 				headers: headers,
 			})
 			if (response.data.isSuccess) {

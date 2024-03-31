@@ -1,7 +1,6 @@
 import { Button, styled } from '@mui/material'
 
 export default function OutlinedButton({ id, level, title, onClick }) {
-	console.log(level, id)
 	const StyledButton = styled(Button)({
 		display: 'flex',
 		alignItems: 'center',

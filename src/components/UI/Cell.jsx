@@ -48,12 +48,16 @@ export default function Cell({
 					<Typography variant='cell_user_item'>
 						{leader.firstName} {leader.lastName}
 					</Typography>
-					{cellUsers.map((cellUser, index) => (
-						<Typography key={cellUser.id} variant='cell_user_subtext'>
-							{cellUser.follower.firstName} {cellUser.follower.lastName} (
-							{'ID-'}
-							{cellUser.follower.id})
-						</Typography>
+					{cellUsers.map(cellUser => (
+						<>
+							{cellUser.isAccepted !== false && (
+								<Typography key={cellUser.id} variant='cell_user_subtext'>
+									{cellUser.follower.firstName} {cellUser.follower.lastName} (
+									{'ID-'}
+									{cellUser.follower.id})
+								</Typography>
+							)}
+						</>
 					))}
 				</Box>
 				<Button

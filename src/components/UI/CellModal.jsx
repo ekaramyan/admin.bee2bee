@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import {
 	Box,
 	Typography,
@@ -6,40 +6,57 @@ import {
 	Modal,
 	TextField,
 	IconButton,
+	CircularProgress,
 } from '@mui/material'
 import { Add, Clear, Close, Done } from '@mui/icons-material'
 import AuthButton from './AuthButton'
 
 export default function CellModal({
 	open,
-	id,
 	title,
 	cellData,
 	setAcceptedCount,
 	acceptedCount,
-	formData,
-	setFormData,
-	setFollowerId,
-	followerId,
-	handleConfirm,
+	addFollowerLoading,
+	addFollowerError,
+	addSuccess,
+	patchingLoading,
+	patchingError,
+	patchingSuccess,
+	onAddUserClick,
+	onDeleteUserClick,
+	onApproveClick,
 	handleClose,
+	refreshFetch,
+	closeSuccess,
+	closeLoading,
+	closeError,
+	closeCell,
 }) {
 	const trimmedFollowers = cellData.cellUsers.slice(0, 6)
 	const paddedFollowers = [
 		...trimmedFollowers.slice(0, 6),
 		...Array(6 - trimmedFollowers.length).fill({}),
 	]
-	const handleChange = name => event => {
-		console.log(event.target.value)
+	const [inputValues, setInputValues] = useState(Array(6).fill(null))
+	const handleChange = index => event => {
+		const newInputValues = [...inputValues]
+		newInputValues[index] = event.target.value
+		setInputValues(newInputValues)
 	}
 	useEffect(() => {
-		// refreshFetch()
+		if (addSuccess || patchingSuccess) {
+			refreshFetch(cellData.id)
+		}
+	}, [addFollowerLoading, patchingLoading, addSuccess, open, acceptedCount])
+
+	useEffect(() => {
 		setAcceptedCount(
 			cellData.cellUsers?.filter(
 				follower => follower?.isPayed && follower.isAccepted === true
 			).length ?? 0
 		)
-	}, [])
+	}, [cellData.cellUsers])
 
 	return (
 		<Modal open={open} onClose={handleClose}>
@@ -85,50 +102,85 @@ export default function CellModal({
 				<Box style={{ display: 'flex', flexDirection: 'column', gap: 15 }}>
 					{paddedFollowers.map((user, index) => (
 						<>
-							{user.id ? (
-								<div
-									key={index}
-									style={{
-										display: 'grid',
-										gridTemplateColumns: '12fr 1fr 1fr',
-										width: '100%',
-									}}
-								>
-									<Typography variant='outlined'>
-										{user.follower.nickname} id - #{user.follower.id}
-									</Typography>
-									<Button style={{ color: '#119A48' }}>
-										<Done />
-									</Button>
-									<Button>
-										<Clear />
-									</Button>
-								</div>
-							) : (
-								<div
-									key={index}
-									style={{
-										display: 'grid',
-										gridTemplateColumns: '6fr 1fr',
-										width: '100%',
-									}}
-								>
-									<TextField
-										style={{ width: '100%' }}
-										type='number'
-										label={'id'}
-										value={followerId}
-										onChange={handleChange(followerId)}
-									/>
-									<Button style={{ color: '#119A48' }}>
-										<Add />
-									</Button>
-								</div>
-							)}
+							<div
+								key={index}
+								style={{
+									display: 'grid',
+									gridTemplateColumns: '12fr 1fr 1fr',
+									width: '100%',
+								}}
+							>
+								{user.id ? (
+									<>
+										<Typography variant='outlined'>
+											{user.follower.nickname} id - #{user.follower.id}
+										</Typography>
+										{patchingLoading ? (
+											<CircularProgress />
+										) : (
+											<>
+												{user.isAccepted !== true && (
+													<Button
+														style={{ color: '#119A48' }}
+														onClick={() => onApproveClick(user.id)}
+													>
+														<Done />
+													</Button>
+												)}
+												<Button onClick={() => onDeleteUserClick(user.id)}>
+													<Clear />
+												</Button>
+											</>
+										)}
+										{patchingError && (
+											<Typography variant='error'>{patchingError}</Typography>
+										)}
+									</>
+								) : (
+									<>
+										<TextField
+											style={{ width: '100%' }}
+											type='number'
+											label={'id'}
+											value={inputValues[index]}
+											onChange={handleChange(index)}
+										/>
+										{addFollowerLoading ? (
+											<CircularProgress />
+										) : (
+											<Button
+												style={{ color: '#119A48' }}
+												onClick={() =>
+													onAddUserClick(
+														cellData.id,
+														Number(inputValues[index])
+													)
+												}
+											>
+												<Add />
+											</Button>
+										)}
+										{addFollowerError ? (
+											<Typography variant='error'>
+												{addFollowerError}
+											</Typography>
+										) : (
+											<></>
+										)}
+									</>
+								)}
+							</div>
 						</>
 					))}
 				</Box>
-				{acceptedCount === 6 && <AuthButton>Close the cell</AuthButton>}
+				{acceptedCount === 6 &&
+					(closeLoading ? (
+						<CircularProgress />
+					) : (
+						<AuthButton onClick={() => closeCell(cellData.id)}>
+							Close the cell
+						</AuthButton>
+					))}
 			</div>
 		</Modal>
 	)
