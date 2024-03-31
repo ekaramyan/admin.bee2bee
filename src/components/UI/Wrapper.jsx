@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { Box, Typography, CircularProgress, useMediaQuery } from '@mui/material'
+import Paginator from './Paginator'
+import LimitPicker from './LimitPicker'
+
+const limits = [25, 50, 100]
 
 const Wrapper = ({ children, style, ...props }) => {
 	const [loading, setLoading] = useState(true)
@@ -56,7 +60,9 @@ const Wrapper = ({ children, style, ...props }) => {
 					sx={{
 						display: 'flex',
 						alignItems: 'center',
-						gap: 2,
+						flexWrap: 'wrap',
+						gap: 5,
+						width: '100%',
 					}}
 				>
 					<Typography
@@ -68,7 +74,34 @@ const Wrapper = ({ children, style, ...props }) => {
 					>
 						{props.header}
 					</Typography>
-					{loading && <CircularProgress size={24} />}
+
+					<Box
+						sx={{
+							display: 'flex',
+							alignItems: 'flex-start',
+							gap: 2,
+							justifyContent: 'center',
+							justifySelf: 'center',
+							width: isMobile ? '100%' : '50%',
+							flexWrap: 'wrap',
+						}}
+					>
+						{props.totalPages && (
+							<Paginator
+								totalPages={props.totalPages}
+								currentPage={props.currentPage}
+								onPageChange={props.onPageChange}
+							/>
+						)}
+						{props.selectedLimit && (
+							<LimitPicker
+								limits={limits}
+								selectedLimit={props.selectedLimit}
+								onLimitChange={props.handleLimitChange}
+							/>
+						)}
+						{loading && <CircularProgress size={24} />}
+					</Box>
 				</Box>
 				<div
 					style={{

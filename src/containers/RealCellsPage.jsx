@@ -1,12 +1,12 @@
 import { Box } from '@mui/material'
 import { useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
-import useCells from '@/hooks/useCells'
+import useRealCells from '@/hooks/useRealCells'
 import Wrapper from '../components/UI/Wrapper'
 const RealCell = dynamic(() => import('@/components/UI/RealCell'))
 
 export default function RealCells() {
-	const { getCells } = useCells()
+	const { getCells } = useRealCells()
 	const [data, setData] = useState([])
 
 	useEffect(() => {

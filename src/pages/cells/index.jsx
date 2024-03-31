@@ -1,7 +1,7 @@
-import JoinCell from '@/containers/JoinCell'
+import Cells from '@/containers/Cells'
 import useAuthentication from '@/hooks/useAuthentication'
 
 export default function JoinTheCell() {
 	useAuthentication()
-	return <JoinCell />
+	return <Cells />
 }

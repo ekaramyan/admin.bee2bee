@@ -1,11 +1,11 @@
 import { Box, LinearProgress, Typography } from '@mui/material'
 import { useEffect, useState } from 'react'
-import useCells from '@/hooks/useCells'
+import useRealCells from '@/hooks/useRealCells'
 import dynamic from 'next/dynamic'
 const RealCell = dynamic(() => import('@/components/UI/RealCell'))
 
 export default function RealCells({ toggleOpen, isRegisterOpen }) {
-	const { getCells, loading } = useCells()
+	const { getCells, loading } = useRealCells()
 	const [data, setData] = useState([])
 
 	useEffect(() => {
@@ -22,7 +22,7 @@ export default function RealCells({ toggleOpen, isRegisterOpen }) {
 
 		fetchData()
 	}, [])
-	
+
 	return (
 		<div
 			style={{

@@ -1,33 +1,40 @@
-import React from 'react'
 import { TableRow, TableCell, Button } from '@mui/material'
+import { Delete, EditNote } from '@mui/icons-material'
 
-export default function TableItem({ item }) {
+export default function TableItem({
+	item,
+	handleOpenModal,
+	handleOpenEditModal,
+	onDeleteClick,
+	onEditClick,
+}) {
 	const { id, nickname, email, levels, cellCount } = item
 
-	const handleEdit = () => {
-		// Обработчик для действия редактирования пользователя
-	}
-
-	const handleDelete = () => {
-		// Обработчик для действия удаления пользователя
-	}
 	const formattedLevels = [...levels].join(', ')
 
 	return (
-		<TableRow>
-			<TableCell>{id}</TableCell>
-			<TableCell>{nickname}</TableCell>
-			<TableCell>{email}</TableCell>
-			<TableCell>{formattedLevels}</TableCell>
-			<TableCell>{cellCount}</TableCell>
-			<TableCell>
-				<Button variant='outlined' onClick={handleEdit}>
-					Edit
-				</Button>
-				<Button variant='outlined' onClick={handleDelete}>
-					Delete
-				</Button>
-			</TableCell>
-		</TableRow>
+		<>
+			<TableRow>
+				<TableCell>{id}</TableCell>
+				<TableCell>{nickname}</TableCell>
+				<TableCell>{email}</TableCell>
+				<TableCell>{formattedLevels}</TableCell>
+				<TableCell>{cellCount}</TableCell>
+				<TableCell style={{ display: 'flex', gap: 15 }}>
+					<Button
+						variant='outlined'
+						onClick={() => handleOpenEditModal(onEditClick, 'edit', id)}
+					>
+						<EditNote />
+					</Button>
+					<Button
+						variant='outlined'
+						onClick={() => handleOpenModal(onDeleteClick, 'delete', id)}
+					>
+						<Delete />
+					</Button>
+				</TableCell>
+			</TableRow>
+		</>
 	)
 }

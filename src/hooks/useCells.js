@@ -9,58 +9,18 @@ export default function useCells() {
 	const [data, setData] = useState(null)
 	const apiUrl = process.env.API_URL
 	const token = Cookies.get('access_token')
+	const headers = {
+		'Content-Type': 'application/json',
+		Authorization: `Bearer ${token}`,
+	}
 
-	const getCells = async (type, additionalParams = {}) => {
+	const getCells = async (page, limit, active, level) => {
 		setLoading(true)
 		setError(null)
 
-		let url = `${apiUrl}/cells/`
-
-		switch (type) {
-			case 'all_inactive_archived':
-				url += `all/list?is_active=false&is_archived=true`
-				break
-			case 'all_active':
-				url += `all/list?is_active=true&is_archived=false`
-				break
-			case 'me_leader_active':
-				url += `me/leader/list?is_active=true&is_archived=false`
-				break
-			case 'me_leader_inactive':
-				url += `me/leader/list?is_active=false&is_archived=true`
-				break
-			case 'me_follower_active':
-				url += `me/follower/list?is_active=true&is_archived=false`
-				break
-			case 'me_follower_inactive':
-				url += `me/follower/list?is_active=false&is_archived=true`
-				break
-			case 'me_followers_level':
-				url += `me/follower/list?level_id=${additionalParams.level}`
-				break
-			case 'me_leader_level':
-				url += `me/leader/list?level_id=${additionalParams.level}`
-				break
-			case 'waiting':
-				url += `queue?level_id=${additionalParams.level}&leader_id=${additionalParams.user}`
-				break
-			case 'all':
-				url += `cells/all/list`
-				break
-			case 'queue':
-				url += `queue?level_id=${additionalParams.level}&limit=3`
-				break
-			case 'real_cells':
-				url += `real/list?level_id=${additionalParams.levelId}&limit=3`
-				break
-			case 'by_id':
-				url += additionalParams.id
-				break
-			default:
-				setError('Unknown type')
-				setLoading(false)
-				return
-		}
+		const url = `${apiUrl}/cells/v2/all/list?page=${page}&limit=${limit}&is_active=${
+			active ? true : false
+		}&is_archived=${active ? false : true}&level_id=${level}`
 
 		try {
 			const response = await axios.get(url, {
@@ -84,5 +44,144 @@ export default function useCells() {
 		}
 	}
 
-	return { data, loading, error, success, getCells }
+	const getCellById = async id => {
+		setLoading(true)
+		setError(null)
+
+		const url = `${apiUrl}/cells/${id}`
+
+		try {
+			const response = await axios.get(url, {
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${token}`,
+				},
+			})
+
+			if (response.status === 200) {
+				setSuccess(true)
+				setData(response.data)
+				return response.data
+			} else {
+				setError('Failed to fetch the data.')
+			}
+		} catch (err) {
+			setError(err.message || 'Error occurred while fetching the data.')
+		} finally {
+			setLoading(false)
+		}
+	}
+
+	const deleteFollower = async followerId => {
+		setLoading(true)
+		try {
+			const response = await axios.delete(
+				`${apiUrl}/cells-followers/${followerId}`,
+				{
+					headers: headers,
+				}
+			)
+			setSuccess(true)
+			return response.data
+		} catch (err) {
+			setError(err.message || 'Error occurred while deleting the follower.')
+			throw err
+		} finally {
+			setLoading(false)
+		}
+	}
+
+	const addFollower = async (cellId, followerId) => {
+		console.log(cellId, followerId)
+		setLoading(true)
+		try {
+			const response = await axios.post(
+				`${apiUrl}/cells/${cellId}/follower/${followerId}`,
+				{},
+				{
+					headers: { Authorization: `Bearer ${token}` },
+				}
+			)
+			if (response.data.isSuccess) {
+				setSuccess(true)
+				return response.data
+			} else {
+				console.log('Unsuccessful operation')
+			}
+		} catch (err) {
+			if (err.response && err.response.status === 403) {
+				setError(
+					'You cannot join this cell cause you have ran out your join limit'
+				)
+			} else {
+				if (process.env.NODE_ENV === 'development') {
+					console.error('Axios error:', err)
+				}
+				setError('Error while joining the cell.')
+			}
+		} finally {
+			setLoading(false)
+		}
+	}
+
+	const editFollower = async (followerId, data) => {
+		setLoading(true)
+		try {
+			const response = await axios.patch(
+				`${apiUrl}/cells-followers/${followerId}`,
+				data,
+				{
+					headers: headers,
+				}
+			)
+			if (response.data.isSuccess) {
+				setSuccess(true)
+				return response.data.isSuccess
+			} else {
+				throw new Error(
+					'Failed to patch the follower. API returned false for isSuccess.'
+				)
+			}
+		} catch (err) {
+			setError(err.message || 'Error occurred while patching the follower.')
+			throw err
+		} finally {
+			setLoading(false)
+		}
+	}
+
+	const closeCell = async (cellId, data) => {
+		setLoading(true)
+		try {
+			const response = await axios.patch(`${apiUrl}/cells/${cellId}`, data, {
+				headers: headers,
+			})
+			if (response.data.isSuccess) {
+				setSuccess(true)
+				return response.data
+			} else {
+				throw new Error(
+					'Failed to post the follower. API returned false for isSuccess.'
+				)
+			}
+		} catch (err) {
+			setError(err.message || 'Error occurred while closing the cell.')
+			throw err
+		} finally {
+			setLoading(false)
+		}
+	}
+
+	return {
+		data,
+		loading,
+		error,
+		success,
+		getCells,
+		getCellById,
+		addFollower,
+		deleteFollower,
+		editFollower,
+		closeCell,
+	}
 }
