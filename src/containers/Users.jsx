@@ -6,6 +6,9 @@ import useUsers from '@/hooks/useUsers'
 
 export default function Users({ header }) {
 	const [limit, setLimit] = useState(25)
+	const [page, setPage] = useState(1)
+	const [updateTable, setUpdateTable] = useState(false)
+	const [tableData, setTableData] = useState(null)
 	const isMobile = useMediaQuery('@media(max-width:1300px)')
 
 	const {
@@ -17,29 +20,39 @@ export default function Users({ header }) {
 	const { data, loading, success, error, deleteUser, editUser, getUserById } =
 		useUsers()
 
-	const fetchDataAsync = async ({ page = 1, limit = limit }) => {
-		try {
-			await getUsers(page, limit)
-		} catch (err) {
-			console.error(err)
-		}
-	}
+	const fetchDataAsync = useCallback(
+		async ({ page, limit }) => {
+			try {
+				console.log(updateTable)
+				const response = await (updateTable
+					? getUsers(page, limit)
+					: new Promise(resolve =>
+							setTimeout(async () => resolve(await getUsers(page, limit)), 1000)
+					  ))
+				const newData = [...response.data]
+				console.log(newData)
+				setTableData(newData)
+			} catch (err) {
+				console.error(err)
+			}
+		},
+		[getUsers]
+	)
 
 	useEffect(() => {
-		fetchDataAsync({ page: 1, limit: limit })
-	}, [limit])
-
-	// useEffect(() => {
-	// 	if (success || error) {
-	// 		fetchDataAsync({ page: 1, limit: limit })
-	// 	}
-	// }, [success, error])
+		fetchDataAsync({ page, limit })
+	}, [limit, updateTable, page])
 
 	const handleLimitChange = limit => {
 		setLimit(limit)
 	}
+
 	const onPageChange = page => {
-		fetchDataAsync({ page, limit })
+		setPage(page)
+	}
+
+	const updateTableData = () => {
+		setUpdateTable(prevState => !prevState)
 	}
 
 	return (
@@ -77,13 +90,14 @@ export default function Users({ header }) {
 					</Box>
 				) : (
 					<TableComponent
-						users={users?.data}
+						users={tableData}
 						deleteUser={deleteUser}
 						editUser={editUser}
 						getUserById={getUserById}
 						loading={loading}
+						updateTableData={updateTableData}
 					/>
-				)}{' '}
+				)}
 			</Box>
 		</Wrapper>
 	)
