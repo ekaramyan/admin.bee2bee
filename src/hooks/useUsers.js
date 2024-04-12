@@ -11,8 +11,10 @@ export default function useUsers() {
 	const token = Cookies.get('access_token')
 
 	const getUsers = async (page, limit) => {
+		setData(null)
 		setLoading(true)
 		setError(null)
+		setSuccess(false)
 
 		const url = `${apiUrl}/users?page=${page}&limit=${limit}`
 
@@ -23,9 +25,10 @@ export default function useUsers() {
 					Authorization: `Bearer ${token}`,
 				},
 			})
+			console.log(response)
 
 			if (response.status === 200) {
-				// setSuccess(true)
+				setSuccess(true)
 				setData(response.data)
 				return response.data
 			} else {
@@ -41,6 +44,7 @@ export default function useUsers() {
 	const getUserById = async id => {
 		setLoading(true)
 		setError(null)
+		setSuccess(null)
 
 		const url = `${apiUrl}/users/${id}`
 
@@ -70,6 +74,7 @@ export default function useUsers() {
 		const url = `${apiUrl}/users/${id}`
 		setLoading(true)
 		setError(null)
+		setSuccess(null)
 		try {
 			axios.patch(url, formData, {
 				headers: {
@@ -95,6 +100,7 @@ export default function useUsers() {
 		const url = `${apiUrl}/users/${id}`
 		setLoading(true)
 		setError(null)
+		setSuccess(null)
 		try {
 			axios.delete(url, {
 				headers: {

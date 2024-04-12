@@ -20,6 +20,7 @@ export default function TableComponent({
 	editUser,
 	getUserById,
 	loading,
+	updateTableData,
 }) {
 	const [modalContent, setModalContent] = useState({
 		title: '',
@@ -112,11 +113,12 @@ export default function TableComponent({
 	}
 	const onEditClick = async (id, formData) => {
 		await editUser(id, formData)
+		updateTableData()
 	}
 	const onDeleteClick = id => {
 		deleteUser(id)
+		updateTableData()
 	}
-
 	return (
 		<>
 			<Table>
