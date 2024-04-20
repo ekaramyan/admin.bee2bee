@@ -51,6 +51,14 @@ export default function Cells() {
 		getCellById,
 	} = useCells()
 	const {
+		data: consultants,
+		loading: consultantsLoading,
+		error: consultantsError,
+		success: consultantsSuccess,
+		getConsultants,
+		editConsultantAndLeader,
+	} = useCells()
+	const {
 		data: follower,
 		success: addSuccess,
 		loading: addFollowerLoading,
@@ -100,6 +108,7 @@ export default function Cells() {
 
 	const onModalOpen = async id => {
 		await getCellById(id)
+		await getConsultants(levelId)
 		setModalOpen(true)
 	}
 
@@ -230,6 +239,8 @@ export default function Cells() {
 					closeCell={onCloseClick}
 					title={`Editing cell #${cell.data.id}`}
 					isLoading={loading}
+					editCaL={editConsultantAndLeader}
+					consultants={consultants}
 				/>
 			)}
 		</>
