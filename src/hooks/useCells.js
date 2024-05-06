@@ -172,6 +172,56 @@ export default function useCells() {
 		}
 	}
 
+	const getConsultants = async level => {
+		setLoading(true)
+		setError(null)
+
+		const url = `${apiUrl}/cells-consultants/list?level_id=${level}`
+
+		try {
+			const response = await axios.get(url, {
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${token}`,
+				},
+			})
+
+			if (response.status === 200) {
+				setSuccess(true)
+				setData(response.data)
+				return response.data
+			} else {
+				setError('Failed to fetch the data.')
+			}
+		} catch (err) {
+			setError(err.message || 'Error occurred while fetching the data.')
+		} finally {
+			setLoading(false)
+		}
+	}
+
+	const editConsultantAndLeader = async (cellId, data) => {
+		setLoading(true)
+		try {
+			const response = await axios.patch(`${apiUrl}/cells/cl/${cellId}`, data, {
+				headers: headers,
+			})
+			if (response.data.isSuccess) {
+				setSuccess(true)
+				return response.data.isSuccess
+			} else {
+				throw new Error(
+					'Failed to patch the follower. API returned false for isSuccess.'
+				)
+			}
+		} catch (err) {
+			setError(err.message || 'Error occurred while patching the follower.')
+			throw err
+		} finally {
+			setLoading(false)
+		}
+	}
+
 	return {
 		data,
 		loading,
@@ -183,5 +233,7 @@ export default function useCells() {
 		deleteFollower,
 		editFollower,
 		closeCell,
+		getConsultants,
+		editConsultantAndLeader,
 	}
 }

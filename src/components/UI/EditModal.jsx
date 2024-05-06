@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import {
 	Modal,
 	TextField,
@@ -18,6 +18,7 @@ export default function EditModal({
 	handleConfirm,
 	handleClose,
 }) {
+	const [error, setError] = useState(null)
 	const handleChange = name => event => {
 		console.log(event.target.type)
 		if (event.target.type === 'checkbox') {
@@ -30,8 +31,12 @@ export default function EditModal({
 		console.log(formData)
 	}, [formData, setFormData])
 	const handleSaveChanges = async () => {
+		// if (!formData.firstName || !formData.lastName || !formData.birth) {
+		// 	setError('please fill required fields')
+		// } else {
 		await handleConfirm(id, formData)
 		await handleClose()
+		// }
 	}
 
 	const getInputField = (type, name) => {
@@ -68,6 +73,28 @@ export default function EditModal({
 						value={formData[name] || ''}
 						onChange={handleChange(name)}
 					/>
+				)
+			case 'date':
+				return (
+					<TextField
+						variant='standard'
+						fullWidth
+						type='date'
+						name='birth'
+						value={formData?.birth}
+						onChange={handleInputChange}
+						InputLabelProps={{ shrink: true }}
+						sx={{
+							width: '50%',
+							background: 'none',
+							border: 'none',
+							borderBottom: '0 !important',
+							outline: 'none',
+							paddingLeft: 2,
+						}}
+					>
+						{data?.birth}
+					</TextField>
 				)
 			default:
 				return null

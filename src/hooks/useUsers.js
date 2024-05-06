@@ -75,13 +75,21 @@ export default function useUsers() {
 		setLoading(true)
 		setError(null)
 		setSuccess(null)
+
+		const filteredFormData = Object.fromEntries(
+			Object.entries(formData).filter(
+				([key, value]) => value !== null && value !== ''
+			)
+		)
+
 		try {
-			axios.patch(url, formData, {
+			const response = await axios.patch(url, filteredFormData, {
 				headers: {
 					'Content-Type': 'application/json',
 					Authorization: `Bearer ${token}`,
 				},
 			})
+
 			if (response.status === 200) {
 				setSuccess(true)
 				setData(response.data)

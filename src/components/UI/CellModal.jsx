@@ -7,6 +7,8 @@ import {
 	TextField,
 	IconButton,
 	CircularProgress,
+	Select,
+	MenuItem,
 } from '@mui/material'
 import { Add, Clear, Close, Done } from '@mui/icons-material'
 import AuthButton from './AuthButton'
@@ -32,6 +34,8 @@ export default function CellModal({
 	closeLoading,
 	closeError,
 	closeCell,
+	editCaL,
+	consultants,
 }) {
 	const trimmedFollowers = cellData.cellUsers.slice(0, 6)
 	const paddedFollowers = [
@@ -57,6 +61,25 @@ export default function CellModal({
 			).length ?? 0
 		)
 	}, [cellData.cellUsers])
+
+	const [formData, setFormData] = useState({
+		leaderId: cellData?.leader.id || '',
+		consultantId: cellData?.consultant.id || '',
+	})
+
+	const handleInputChange = e => {
+		setFormData({
+			...formData,
+			[e.target.name]: e.target.value,
+		})
+		e.target.size = e.target.value.length || 1
+	}
+
+	const consultantName = consultants?.data?.find(
+		consultant => consultant.id === formData.consultantId
+	)
+
+	console.log(cellData)
 
 	return (
 		<Modal open={open} onClose={handleClose}>
@@ -84,20 +107,46 @@ export default function CellModal({
 				<div
 					style={{
 						display: 'grid',
-						gridTemplateColumns: '1fr 1fr',
+						gridTemplateColumns: '6.5fr 6.5fr 2fr',
 						width: '100%',
 						gap: 15,
 					}}
 				>
-					<Typography variant='outlined'>
+					{/* <Typography variant='outlined'>
 						Consultant: {cellData.consultant.firstName}{' '}
-						{cellData.consultant.lastName}
-					</Typography>
+            {cellData.consultant.lastName}
+					</Typography> */}
 
-					<Typography variant='outlined'>
-						Leader: {cellData.leader.firstName} {cellData.leader.lastName} (id #
-						{cellData.leader.id} )
-					</Typography>
+					<TextField
+						label='Consultant'
+						variant='outlined'
+						value={formData.consultantId}
+						onChange={handleInputChange}
+						fullWidth
+						select
+						name='consultantId'
+					>
+						{consultants?.data?.map(consultant => (
+							<MenuItem key={consultant.id} value={consultant.id}>
+								{consultant.firstName} {consultant.lastName}
+							</MenuItem>
+						))}
+					</TextField>
+
+					<TextField
+						variant='outlined'
+						type='number'
+						value={formData?.leaderId || cellData.leader.id}
+						onChange={handleInputChange}
+						name='leaderId'
+						label='Leader'
+					/>
+					<Button
+						style={{ color: '#119A48' }}
+						onClick={() => editCaL(cellData.id, formData)}
+					>
+						<Done />
+					</Button>
 				</div>
 				<Box style={{ display: 'flex', flexDirection: 'column', gap: 15 }}>
 					{paddedFollowers.map((user, index) => (
