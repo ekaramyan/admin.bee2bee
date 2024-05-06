@@ -57,7 +57,7 @@ export default function TableComponent({
 		setFormData({
 			firstName: data?.firstName || '',
 			lastName: data?.lastName || '',
-			birth: data?.birth || '',
+			birth: data?.birth || new Date().toISOString().split('T')[0],
 			email: data?.email || '',
 			country: data?.country || '',
 			nickname: data?.nickname || '',
