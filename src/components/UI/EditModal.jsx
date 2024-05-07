@@ -31,12 +31,8 @@ export default function EditModal({
 		console.log(formData)
 	}, [formData, setFormData])
 	const handleSaveChanges = async () => {
-		// if (!formData.firstName || !formData.lastName || !formData.birth) {
-		// 	setError('please fill required fields')
-		// } else {
 		await handleConfirm(id, formData)
 		await handleClose()
-		// }
 	}
 
 	const getInputField = (type, name) => {
