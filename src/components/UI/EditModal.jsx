@@ -31,16 +31,11 @@ export default function EditModal({
 		console.log(formData)
 	}, [formData, setFormData])
 	const handleSaveChanges = async () => {
-		// if (!formData.firstName || !formData.lastName || !formData.birth) {
-		// 	setError('please fill required fields')
-		// } else {
 		await handleConfirm(id, formData)
 		await handleClose()
-		// }
 	}
 
 	const getInputField = (type, name) => {
-		console.log(type)
 		switch (type) {
 			case 'boolean':
 				return (
@@ -56,14 +51,29 @@ export default function EditModal({
 					/>
 				)
 			case 'string':
-				return (
-					<TextField
-						style={{ width: '100%' }}
-						label={name}
-						value={formData[name] || ''}
-						onChange={handleChange(name)}
-					/>
-				)
+				if (name === 'birth') {
+					return (
+						<TextField
+							fullWidth
+							type='date'
+							name='birth'
+							value={formData?.birth}
+							onChange={handleChange(name)}
+							InputLabelProps={{ shrink: true }}
+						>
+							{formData?.birth}
+						</TextField>
+					)
+				} else {
+					return (
+						<TextField
+							style={{ width: '100%' }}
+							label={name}
+							value={formData[name] || ''}
+							onChange={handleChange(name)}
+						/>
+					)
+				}
 			case 'number':
 				return (
 					<TextField
@@ -74,28 +84,7 @@ export default function EditModal({
 						onChange={handleChange(name)}
 					/>
 				)
-			case 'date':
-				return (
-					<TextField
-						variant='standard'
-						fullWidth
-						type='date'
-						name='birth'
-						value={formData?.birth}
-						onChange={handleInputChange}
-						InputLabelProps={{ shrink: true }}
-						sx={{
-							width: '50%',
-							background: 'none',
-							border: 'none',
-							borderBottom: '0 !important',
-							outline: 'none',
-							paddingLeft: 2,
-						}}
-					>
-						{data?.birth}
-					</TextField>
-				)
+
 			default:
 				return null
 		}
