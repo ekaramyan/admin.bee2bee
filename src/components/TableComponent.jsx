@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import Image from 'next/image'
 import {
 	Table,
@@ -51,7 +51,6 @@ export default function TableComponent({
 	}
 
 	const handleOpenEditModal = async (action, actionType, id) => {
-		// setActionToConfirm(() => () => action(id, formData))
 		updateModalContent(actionType, id)
 		const { data } = await getUserById(id)
 		setFormData({
