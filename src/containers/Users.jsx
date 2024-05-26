@@ -5,7 +5,7 @@ import TableComponent from '@/components/TableComponent'
 import useUsers from '@/hooks/useUsers'
 
 export default function Users({ header }) {
-	const [limit, setLimit] = useState(25)
+	const [limit, setLimit] = useState(100)
 	const [page, setPage] = useState(1)
 	const [updateTable, setUpdateTable] = useState(false)
 	const [tableData, setTableData] = useState(null)

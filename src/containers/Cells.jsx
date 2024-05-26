@@ -35,7 +35,7 @@ const closeData = {
 
 export default function Cells() {
 	const [active, setActive] = useState(true)
-	const [limit, setLimit] = useState(25)
+	const [limit, setLimit] = useState(100)
 	const [levels, setLevels] = useState(null)
 	const [levelId, setLevelId] = useState(1)
 	const [modalOpen, setModalOpen] = useState(false)
