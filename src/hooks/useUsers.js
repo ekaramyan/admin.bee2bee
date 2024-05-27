@@ -16,7 +16,7 @@ export default function useUsers() {
 		setError(null)
 		setSuccess(false)
 
-		const url = `${apiUrl}/users?page=${page}&limit=${limit}`
+		const url = `${apiUrl}/users?page=${page}&limit=${limit}&sort=created_at`
 
 		try {
 			const response = await axios.get(url, {
