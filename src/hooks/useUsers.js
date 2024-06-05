@@ -10,13 +10,14 @@ export default function useUsers() {
 	const apiUrl = process.env.API_URL
 	const token = Cookies.get('access_token')
 
-	const getUsers = async (page, limit) => {
+	const getUsers = async (page = 1, limit = 100, search = null) => {
 		setData(null)
 		setLoading(true)
 		setError(null)
 		setSuccess(false)
-
-		const url = `${apiUrl}/users?page=${page}&limit=${limit}&sort=created_at`
+		console.log(search)
+		const searchQuery = search ? `&search=${search}` : ''
+		const url = `${apiUrl}/users?page=${page}&limit=${limit}&sort=created_at${searchQuery}`
 
 		try {
 			const response = await axios.get(url, {

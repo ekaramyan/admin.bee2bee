@@ -14,13 +14,20 @@ export default function useCells() {
 		Authorization: `Bearer ${token}`,
 	}
 
-	const getCells = async (page, limit, active, level) => {
+	const getCells = async ({ page, limit, active, level, search }) => {
 		setLoading(true)
 		setError(null)
+		console.log(search)
+		const searchQuery = search ? `&search=${search}` : ''
+		const archivedQuery =
+			active !== (null || undefined)
+				? `&is_active=${active ? true : false}&is_archived=${
+						active ? false : true
+				  }`
+				: ''
+		const levelQuery = level ? `&level_id=${level}` : ''
 
-		const url = `${apiUrl}/cells/v2/all/list?page=${page}&limit=${limit}&is_active=${
-			active ? true : false
-		}&is_archived=${active ? false : true}&level_id=${level}`
+		const url = `${apiUrl}/cells/v2/all/list?page=${page}&limit=${limit}${archivedQuery}${levelQuery}${searchQuery}`
 
 		try {
 			const response = await axios.get(url, {

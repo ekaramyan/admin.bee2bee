@@ -18,6 +18,7 @@ import { fetchData } from '@/api/fetchData'
 import useCells from '@/hooks/useCells'
 import OutlinedButton from '@/components/UI/OutlinedButton'
 import CellModal from '@/components/UI/CellModal'
+import SearchInput from '@/components/UI/SearchInput'
 const Cell = dynamic(() => import('../components/UI/Cell'))
 
 const token = Cookies.get('access_token')
@@ -40,6 +41,7 @@ export default function Cells() {
 	const [levelId, setLevelId] = useState(1)
 	const [modalOpen, setModalOpen] = useState(false)
 	const [acceptedCount, setAcceptedCount] = useState(0)
+
 	const isMobile = useMediaQuery('@media(max-width:1300px)')
 
 	const { data, loading, error, getCells } = useCells()
@@ -81,18 +83,25 @@ export default function Cells() {
 	} = useCells()
 
 	const fetchDataAsync = async ({
-		page = 1,
+		page = page,
 		limit = limit,
 		active = active,
 		level = level,
 	}) => {
 		try {
-			await getCells(page, limit, active, level)
+			await getCells({ page: page, limit: limit, active: active, level: level })
 			const response = await fetchData(`${url}/cell-levels`, token)
 			setLevels(response.data)
 		} catch (err) {
 			console.error(err)
 		}
+	}
+
+	const searchCell = async ({ page = 1, limit = 100, search = search }) => {
+		console.log(search)
+		await getCells({ page: page, limit: limit, search: search })
+		const response = await fetchData(`${url}/cell-levels`, token)
+		setLevels(response.data)
 	}
 
 	useEffect(() => {
@@ -159,6 +168,7 @@ export default function Cells() {
 					maxHeight: isMobile ? '80dvh' : 'none',
 				}}
 			>
+				<SearchInput onSearch={searchCell} initialValue={''} />
 				<Box
 					style={{
 						display: 'flex',

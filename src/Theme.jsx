@@ -93,6 +93,9 @@ const theme = createTheme({
 		secondary: {
 			color: '#fff',
 		},
+		primary: {
+			color: '#241f55',
+		},
 		auth: {},
 	},
 	typography: {

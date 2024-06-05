@@ -3,6 +3,7 @@ import { useState, useEffect, useCallback } from 'react'
 import Wrapper from '@/components/UI/Wrapper'
 import TableComponent from '@/components/TableComponent'
 import useUsers from '@/hooks/useUsers'
+import SearchInput from '@/components/UI/SearchInput'
 
 export default function Users({ header }) {
 	const [limit, setLimit] = useState(100)
@@ -21,13 +22,16 @@ export default function Users({ header }) {
 		useUsers()
 
 	const fetchDataAsync = useCallback(
-		async ({ page, limit }) => {
+		async ({ page: page, limit: limit, search: search }) => {
 			try {
-				console.log(updateTable)
+				console.log(search)
 				const response = await (updateTable
-					? getUsers(page, limit)
+					? getUsers(page, limit, search)
 					: new Promise(resolve =>
-							setTimeout(async () => resolve(await getUsers(page, limit)), 1000)
+							setTimeout(
+								async () => resolve(await getUsers(page, limit, search)),
+								1000
+							)
 					  ))
 				const newData = [...response.data]
 				console.log(newData)
@@ -40,7 +44,7 @@ export default function Users({ header }) {
 	)
 
 	useEffect(() => {
-		fetchDataAsync({ page, limit })
+		fetchDataAsync({ page: page, limit: limit })
 	}, [limit, updateTable, page])
 
 	const handleLimitChange = limit => {
@@ -57,7 +61,12 @@ export default function Users({ header }) {
 
 	return (
 		<Wrapper
-			header={header}
+			header={
+				<Box style={{ display: 'flex', alignItems: 'center', gap: 15 }}>
+					{header}
+					<SearchInput onSearch={fetchDataAsync} initialValue={''} />
+				</Box>
+			}
 			totalPages={users?.total_pages}
 			currentPage={users?.current_page}
 			onPageChange={onPageChange}
