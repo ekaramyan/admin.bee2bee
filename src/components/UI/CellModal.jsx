@@ -67,7 +67,7 @@ export default function CellModal({
 	})
 	const [editModalOpen, setEditModalOpen] = useState(false)
 
-	const { data, loading, success, editUser, getUserById } = useUsers()
+	const { data, loading, success, error, editUser, getUserById } = useUsers()
 
 	const handleChange = index => event => {
 		const newInputValues = [...inputValues]

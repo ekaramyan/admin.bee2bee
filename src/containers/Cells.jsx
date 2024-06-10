@@ -11,7 +11,6 @@ import {
 	CircularProgress,
 	Typography,
 } from '@mui/material'
-import { useRouter } from 'next/router'
 import dynamic from 'next/dynamic'
 import Cookies from 'js-cookie'
 import { fetchData } from '@/api/fetchData'

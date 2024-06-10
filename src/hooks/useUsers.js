@@ -99,7 +99,10 @@ export default function useUsers() {
 				setError('Failed to fetch the data.')
 			}
 		} catch (err) {
-			setError(err.message || 'Error occurred while fetching the data.')
+			setError(
+				err.response.data.message || 'Error occurred while fetching the data.'
+			)
+			console.log(error)
 		} finally {
 			setLoading(false)
 		}
