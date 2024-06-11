@@ -1,14 +1,43 @@
-import { Box, CircularProgress, useMediaQuery } from '@mui/material'
-import { useState, useEffect, useCallback } from 'react'
+import {
+	Box,
+	CircularProgress,
+	useMediaQuery,
+	Dialog,
+	DialogContent,
+	styled,
+	Typography,
+	Slide,
+} from '@mui/material'
+import { useState, useEffect, useCallback, forwardRef } from 'react'
 import Wrapper from '@/components/UI/Wrapper'
 import TableComponent from '@/components/TableComponent'
 import useUsers from '@/hooks/useUsers'
+import SearchInput from '@/components/UI/SearchInput'
+
+const StyledDialog = styled(Dialog)(({ theme }) => ({
+	'& .MuiDialog-paper': {
+		top: '10px',
+		margin: '0',
+		position: 'absolute',
+		backgroundColor: '#fff',
+		borderRadius: 15,
+		boxShadow: 'none',
+		transition: '.3s',
+	},
+	'& .MuiBackdrop-root': {
+		backgroundColor: 'transparent',
+	},
+}))
+const Transition = forwardRef(function Transition(props, ref) {
+	return <Slide direction='down' ref={ref} {...props} />
+})
 
 export default function Users({ header }) {
-	const [limit, setLimit] = useState(25)
+	const [limit, setLimit] = useState(100)
 	const [page, setPage] = useState(1)
 	const [updateTable, setUpdateTable] = useState(false)
 	const [tableData, setTableData] = useState(null)
+	const [showErrorDialog, setShowErrorDialog] = useState(false)
 	const isMobile = useMediaQuery('@media(max-width:1300px)')
 
 	const {
@@ -21,13 +50,16 @@ export default function Users({ header }) {
 		useUsers()
 
 	const fetchDataAsync = useCallback(
-		async ({ page, limit }) => {
+		async ({ page: page, limit: limit, search: search }) => {
 			try {
-				console.log(updateTable)
+				console.log(search)
 				const response = await (updateTable
-					? getUsers(page, limit)
+					? getUsers(page, limit, search)
 					: new Promise(resolve =>
-							setTimeout(async () => resolve(await getUsers(page, limit)), 1000)
+							setTimeout(
+								async () => resolve(await getUsers(page, limit, search)),
+								1000
+							)
 					  ))
 				const newData = [...response.data]
 				console.log(newData)
@@ -40,8 +72,14 @@ export default function Users({ header }) {
 	)
 
 	useEffect(() => {
-		fetchDataAsync({ page, limit })
+		fetchDataAsync({ page: page, limit: limit })
 	}, [limit, updateTable, page])
+
+	useEffect(() => {
+		if (error) {
+			setShowErrorDialog(true)
+		}
+	}, [error, usersError])
 
 	const handleLimitChange = limit => {
 		setLimit(limit)
@@ -56,49 +94,69 @@ export default function Users({ header }) {
 	}
 
 	return (
-		<Wrapper
-			header={header}
-			totalPages={users?.total_pages}
-			currentPage={users?.current_page}
-			onPageChange={onPageChange}
-			handleLimitChange={handleLimitChange}
-			selectedLimit={limit}
-			style={{
-				minHeight: 760,
-				maxHeight: isMobile ? '80dvh' : 'none',
-			}}
-		>
-			<Box
+		<>
+			{error && showErrorDialog && (
+				<StyledDialog
+					open={showErrorDialog}
+					TransitionComponent={Transition}
+					onClick={() => setShowErrorDialog(false)}
+				>
+					<DialogContent>
+						<Typography variant='body1'>{error}</Typography>
+					</DialogContent>
+				</StyledDialog>
+			)}
+			<Wrapper
+				header={
+					<Box style={{ display: 'flex', alignItems: 'center', gap: 15 }}>
+						{header}
+						<SearchInput onSearch={fetchDataAsync} initialValue={''} />
+					</Box>
+				}
+				totalPages={users?.total_pages}
+				currentPage={users?.current_page}
+				onPageChange={onPageChange}
+				handleLimitChange={handleLimitChange}
+				selectedLimit={limit}
 				style={{
-					height: '100%',
-					overflowY: usersLoading ? 'none' : 'auto',
-					padding: '10px',
-					scrollbarColor: '#bc5a00 #f17d15',
+					minHeight: 760,
+					maxHeight: isMobile ? '80dvh' : 'none',
 				}}
 			>
-				{usersLoading ? (
-					<Box
-						style={{
-							display: 'flex',
-							alignItems: 'center',
-							justifyContent: 'center',
-							width: '100%',
-							height: '100%',
-						}}
-					>
-						<CircularProgress size={72} />
-					</Box>
-				) : (
-					<TableComponent
-						users={tableData}
-						deleteUser={deleteUser}
-						editUser={editUser}
-						getUserById={getUserById}
-						loading={loading}
-						updateTableData={updateTableData}
-					/>
-				)}
-			</Box>
-		</Wrapper>
+				<Box
+					style={{
+						height: '100%',
+						overflowY: usersLoading ? 'none' : 'auto',
+						padding: '10px',
+						scrollbarColor: '#bc5a00 #f17d15',
+					}}
+				>
+					{usersLoading ? (
+						<Box
+							style={{
+								display: 'flex',
+								alignItems: 'center',
+								justifyContent: 'center',
+								width: '100%',
+								height: '100%',
+							}}
+						>
+							<CircularProgress size={72} />
+						</Box>
+					) : (
+						<TableComponent
+							users={tableData}
+							deleteUser={deleteUser}
+							editUser={editUser}
+							getUserById={getUserById}
+							loading={loading}
+							error={error}
+							success={success}
+							updateTableData={updateTableData}
+						/>
+					)}
+				</Box>
+			</Wrapper>
+		</>
 	)
 }

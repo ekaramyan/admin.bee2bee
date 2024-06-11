@@ -125,6 +125,7 @@ export default function TableComponent({
 					<TableRow>
 						<TableCell>ID</TableCell>
 						<TableCell>Nickname</TableCell>
+						<TableCell>Registration</TableCell>
 						<TableCell>Email</TableCell>
 						<TableCell>Levels</TableCell>
 						<TableCell>Cells</TableCell>

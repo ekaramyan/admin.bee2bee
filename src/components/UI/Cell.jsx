@@ -46,7 +46,8 @@ export default function Cell({
 						{firstName} {lastName}
 					</Typography>
 					<Typography variant='cell_user_item'>
-						{leader.firstName} {leader.lastName}
+						{leader.firstName} {leader.lastName} ({'ID-'}
+						{leader.id})
 					</Typography>
 					{cellUsers.map(cellUser => (
 						<>

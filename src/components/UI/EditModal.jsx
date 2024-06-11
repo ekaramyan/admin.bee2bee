@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import {
 	Modal,
 	TextField,
@@ -18,9 +18,7 @@ export default function EditModal({
 	handleConfirm,
 	handleClose,
 }) {
-	const [error, setError] = useState(null)
 	const handleChange = name => event => {
-		console.log(event.target.type)
 		if (event.target.type === 'checkbox') {
 			setFormData({ ...formData, [name]: event.target.checked })
 		} else {
@@ -40,7 +38,7 @@ export default function EditModal({
 			case 'boolean':
 				return (
 					<FormControlLabel
-						style={{ width: '100%' }}
+						fullWidth
 						control={
 							<Checkbox
 								checked={Boolean(formData[name]) || false}
@@ -67,7 +65,7 @@ export default function EditModal({
 				} else {
 					return (
 						<TextField
-							style={{ width: '100%' }}
+							fullWidth
 							label={name}
 							value={formData[name] || ''}
 							onChange={handleChange(name)}
@@ -77,14 +75,13 @@ export default function EditModal({
 			case 'number':
 				return (
 					<TextField
-						style={{ width: '100%' }}
+						fullWidth
 						type='number'
 						label={name}
 						value={formData[name] || ''}
 						onChange={handleChange(name)}
 					/>
 				)
-
 			default:
 				return null
 		}
