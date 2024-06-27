@@ -34,6 +34,7 @@ const Transition = forwardRef(function Transition(props, ref) {
 
 export default function Users({ header }) {
 	const [limit, setLimit] = useState(100)
+	const [sorting, setSorting] = useState('created_at')
 	const [page, setPage] = useState(1)
 	const [updateTable, setUpdateTable] = useState(false)
 	const [tableData, setTableData] = useState(null)
@@ -54,10 +55,11 @@ export default function Users({ header }) {
 			try {
 				console.log(search)
 				const response = await (updateTable
-					? getUsers(page, limit, search)
+					? getUsers(page, limit, search, sorting)
 					: new Promise(resolve =>
 							setTimeout(
-								async () => resolve(await getUsers(page, limit, search)),
+								async () =>
+									resolve(await getUsers(page, limit, search, sorting)),
 								1000
 							)
 					  ))
@@ -73,7 +75,7 @@ export default function Users({ header }) {
 
 	useEffect(() => {
 		fetchDataAsync({ page: page, limit: limit })
-	}, [limit, updateTable, page])
+	}, [limit, updateTable, page, sorting])
 
 	useEffect(() => {
 		if (error) {
@@ -83,6 +85,9 @@ export default function Users({ header }) {
 
 	const handleLimitChange = limit => {
 		setLimit(limit)
+	}
+	const handleSortingChange = sorting => {
+		setSorting(sorting)
 	}
 
 	const onPageChange = page => {
@@ -118,6 +123,8 @@ export default function Users({ header }) {
 				onPageChange={onPageChange}
 				handleLimitChange={handleLimitChange}
 				selectedLimit={limit}
+				handleSortingChange={handleSortingChange}
+				selectedSorting={sorting}
 				style={{
 					minHeight: 760,
 					maxHeight: isMobile ? '80dvh' : 'none',

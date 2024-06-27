@@ -17,12 +17,16 @@ export default function OutlinedButton({ id, level, title, onClick }) {
 		fontWeight: 400,
 		textTransform: 'uppercase',
 		borderRadius: '5px',
-		border: level === id ? '2px solid #E06B00' : '1px solid #F9AA13',
-		background: '#EAEEE8',
+		border: level === id ? '1px solid #E06B00' : '1px solid #F9AA13',
+		background: level === id ? '#E06B00' : '#EAEEE8',
 		cursor: 'pointer',
 		transition: '.3s',
 		'&:hover': {
 			border: '1px solid #E06B00',
+			background: '#E06B00',
+			p: {
+				color: '#23201C',
+			},
 		},
 		'&:disabled': {
 			cursor: 'not-allowed',
@@ -31,7 +35,7 @@ export default function OutlinedButton({ id, level, title, onClick }) {
 			background: 'rgba(217, 217, 217, 0.2)',
 		},
 		p: {
-			color: '#E06B00',
+			color: level === id ? '#23201C' : '#E06B00',
 			fontSize: 14,
 			fontWeight: 700,
 		},

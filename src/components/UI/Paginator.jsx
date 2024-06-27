@@ -7,7 +7,6 @@ export default function Paginator({ totalPages, currentPage, onPageChange }) {
 	const handleChange = (event, value) => {
 		onPageChange(value)
 	}
-
 	return (
 		<Box
 			sx={{
@@ -22,6 +21,8 @@ export default function Paginator({ totalPages, currentPage, onPageChange }) {
 					count={totalPages}
 					page={currentPage}
 					onChange={handleChange}
+					boundaryCount={1}
+					siblingCount={2}
 					color='primary'
 				/>
 			</Stack>

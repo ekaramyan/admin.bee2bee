@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { Box, Typography, CircularProgress, useMediaQuery } from '@mui/material'
 import Paginator from './Paginator'
-import LimitPicker from './LimitPicker'
+import Picker from './Picker'
 
 const limits = [25, 50, 100]
+const sortings = ['id', 'created_at', 'updated_at']
 
 const Wrapper = ({ children, style, ...props }) => {
 	const [loading, setLoading] = useState(true)
@@ -94,10 +95,17 @@ const Wrapper = ({ children, style, ...props }) => {
 							/>
 						)}
 						{props.selectedLimit && (
-							<LimitPicker
-								limits={limits}
-								selectedLimit={props.selectedLimit}
-								onLimitChange={props.handleLimitChange}
+							<Picker
+								items={limits}
+								selectedItem={props.selectedLimit}
+								onChange={props.handleLimitChange}
+							/>
+						)}
+						{props.selectedSorting && (
+							<Picker
+								items={sortings}
+								selectedItem={props.selectedSorting}
+								onChange={props.handleSortingChange}
 							/>
 						)}
 						{loading && <CircularProgress size={24} />}
