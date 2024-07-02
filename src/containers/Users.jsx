@@ -55,7 +55,7 @@ export default function Users({ header }) {
 		async ({ page: page, limit: limit, search: search }) => {
 			try {
 				const response = await (updateTable
-					? getUsers(page, limit, searchQuery, sorting)
+					? getUsers(page, limit, search, sorting)
 					: new Promise(resolve =>
 							setTimeout(
 								async () =>
