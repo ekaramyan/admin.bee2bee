@@ -37,7 +37,7 @@ export default function Cells() {
 	const [active, setActive] = useState(true)
 	const [limit, setLimit] = useState(100)
 	const [levels, setLevels] = useState(null)
-	const [levelId, setLevelId] = useState(1)
+	const [levelId, setLevelId] = useState(null)
 	const [modalOpen, setModalOpen] = useState(false)
 	const [acceptedCount, setAcceptedCount] = useState(0)
 
