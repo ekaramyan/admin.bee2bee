@@ -3,7 +3,7 @@ import { Button, Stack, TextField } from '@mui/material'
 import { SearchOutlined } from '@mui/icons-material'
 import useInput from '@/hooks/useInput'
 
-export default function SearchInput({ onSearch, initialValue }) {
+export default function SearchInput({ onSearch, initialValue, setSearch }) {
 	const { value, onChange } = useInput(initialValue)
 	const [debouncedValue, setDebouncedValue] = useState(value)
 
@@ -24,6 +24,7 @@ export default function SearchInput({ onSearch, initialValue }) {
 	const handleChange = e => {
 		onChange(e)
 		setDebouncedValue(e.target.value)
+		setSearch(e.target.value)
 	}
 	return (
 		<Stack display='flex' alignItems='center' flexDirection='row' gap={1}>

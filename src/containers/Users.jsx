@@ -39,6 +39,7 @@ export default function Users({ header }) {
 	const [updateTable, setUpdateTable] = useState(false)
 	const [tableData, setTableData] = useState(null)
 	const [showErrorDialog, setShowErrorDialog] = useState(false)
+	const [searchQuery, setSearchQuery] = useState(null)
 	const isMobile = useMediaQuery('@media(max-width:1300px)')
 
 	const {
@@ -53,9 +54,8 @@ export default function Users({ header }) {
 	const fetchDataAsync = useCallback(
 		async ({ page: page, limit: limit, search: search }) => {
 			try {
-				console.log(search)
 				const response = await (updateTable
-					? getUsers(page, limit, search, sorting)
+					? getUsers(page, limit, searchQuery, sorting)
 					: new Promise(resolve =>
 							setTimeout(
 								async () =>
@@ -64,7 +64,6 @@ export default function Users({ header }) {
 							)
 					  ))
 				const newData = [...response.data]
-				console.log(newData)
 				setTableData(newData)
 			} catch (err) {
 				console.error(err)
@@ -74,7 +73,7 @@ export default function Users({ header }) {
 	)
 
 	useEffect(() => {
-		fetchDataAsync({ page: page, limit: limit })
+		fetchDataAsync({ page: page, limit: limit, search: searchQuery })
 	}, [limit, updateTable, page, sorting])
 
 	useEffect(() => {
@@ -115,7 +114,11 @@ export default function Users({ header }) {
 				header={
 					<Box style={{ display: 'flex', alignItems: 'center', gap: 15 }}>
 						{header}
-						<SearchInput onSearch={fetchDataAsync} initialValue={''} />
+						<SearchInput
+							onSearch={fetchDataAsync}
+							initialValue={''}
+							setSearch={setSearchQuery}
+						/>
 					</Box>
 				}
 				totalPages={users?.total_pages}
