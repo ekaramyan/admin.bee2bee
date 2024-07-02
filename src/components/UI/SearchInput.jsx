@@ -14,7 +14,10 @@ export default function SearchInput({ onSearch, initialValue }) {
 			<TextField
 				variant='outlined'
 				placeholder='Search'
-				onChange={onChange}
+				onChange={e => {
+					onChange(e)
+					onSearch({ search: e.target.value })
+				}}
 				onKeyPress={handleKeyPress}
 				value={value}
 			/>
