@@ -97,7 +97,7 @@ export default function Cells() {
 	}
 
 	const searchCell = async ({ page = 1, limit = 100, search = search }) => {
-		await getCells({ page: page, limit: limit, search: search })
+		await getCells({ page: page, limit: limit, search: search, active: active })
 		const response = await fetchData(`${url}/cell-levels`, token)
 		setLevels(response.data)
 	}
