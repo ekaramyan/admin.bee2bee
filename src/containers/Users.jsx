@@ -34,10 +34,12 @@ const Transition = forwardRef(function Transition(props, ref) {
 
 export default function Users({ header }) {
 	const [limit, setLimit] = useState(100)
+	const [sorting, setSorting] = useState('created_at')
 	const [page, setPage] = useState(1)
 	const [updateTable, setUpdateTable] = useState(false)
 	const [tableData, setTableData] = useState(null)
 	const [showErrorDialog, setShowErrorDialog] = useState(false)
+	const [searchQuery, setSearchQuery] = useState(null)
 	const isMobile = useMediaQuery('@media(max-width:1300px)')
 
 	const {
@@ -52,17 +54,16 @@ export default function Users({ header }) {
 	const fetchDataAsync = useCallback(
 		async ({ page: page, limit: limit, search: search }) => {
 			try {
-				console.log(search)
 				const response = await (updateTable
-					? getUsers(page, limit, search)
+					? getUsers(page, limit, search, sorting)
 					: new Promise(resolve =>
 							setTimeout(
-								async () => resolve(await getUsers(page, limit, search)),
+								async () =>
+									resolve(await getUsers(page, limit, search, sorting)),
 								1000
 							)
 					  ))
 				const newData = [...response.data]
-				console.log(newData)
 				setTableData(newData)
 			} catch (err) {
 				console.error(err)
@@ -72,8 +73,8 @@ export default function Users({ header }) {
 	)
 
 	useEffect(() => {
-		fetchDataAsync({ page: page, limit: limit })
-	}, [limit, updateTable, page])
+		fetchDataAsync({ page: page, limit: limit, search: searchQuery })
+	}, [limit, updateTable, page, sorting])
 
 	useEffect(() => {
 		if (error) {
@@ -83,6 +84,9 @@ export default function Users({ header }) {
 
 	const handleLimitChange = limit => {
 		setLimit(limit)
+	}
+	const handleSortingChange = sorting => {
+		setSorting(sorting)
 	}
 
 	const onPageChange = page => {
@@ -110,7 +114,11 @@ export default function Users({ header }) {
 				header={
 					<Box style={{ display: 'flex', alignItems: 'center', gap: 15 }}>
 						{header}
-						<SearchInput onSearch={fetchDataAsync} initialValue={''} />
+						<SearchInput
+							onSearch={fetchDataAsync}
+							initialValue={''}
+							setSearch={setSearchQuery}
+						/>
 					</Box>
 				}
 				totalPages={users?.total_pages}
@@ -118,6 +126,8 @@ export default function Users({ header }) {
 				onPageChange={onPageChange}
 				handleLimitChange={handleLimitChange}
 				selectedLimit={limit}
+				handleSortingChange={handleSortingChange}
+				selectedSorting={sorting}
 				style={{
 					minHeight: 760,
 					maxHeight: isMobile ? '80dvh' : 'none',

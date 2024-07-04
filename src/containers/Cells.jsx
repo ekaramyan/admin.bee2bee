@@ -37,9 +37,10 @@ export default function Cells() {
 	const [active, setActive] = useState(true)
 	const [limit, setLimit] = useState(100)
 	const [levels, setLevels] = useState(null)
-	const [levelId, setLevelId] = useState(1)
+	const [levelId, setLevelId] = useState(null)
 	const [modalOpen, setModalOpen] = useState(false)
 	const [acceptedCount, setAcceptedCount] = useState(0)
+	const [searchQuery, setSearchQuery] = useState(null)
 
 	const isMobile = useMediaQuery('@media(max-width:1300px)')
 
@@ -86,9 +87,16 @@ export default function Cells() {
 		limit = limit,
 		active = active,
 		level = level,
+		search = search,
 	}) => {
 		try {
-			await getCells({ page: page, limit: limit, active: active, level: level })
+			await getCells({
+				page: page,
+				limit: limit,
+				active: active,
+				level: level,
+				search: searchQuery,
+			})
 			const response = await fetchData(`${url}/cell-levels`, token)
 			setLevels(response.data)
 		} catch (err) {
@@ -97,14 +105,25 @@ export default function Cells() {
 	}
 
 	const searchCell = async ({ page = 1, limit = 100, search = search }) => {
-		console.log(search)
-		await getCells({ page: page, limit: limit, search: search })
+		await getCells({
+			page: page,
+			limit: limit,
+			search: search,
+			active: active,
+			level: levelId,
+		})
 		const response = await fetchData(`${url}/cell-levels`, token)
 		setLevels(response.data)
 	}
 
 	useEffect(() => {
-		fetchDataAsync({ page: 1, limit: limit, active: active, level: levelId })
+		fetchDataAsync({
+			page: 1,
+			limit: limit,
+			active: active,
+			level: levelId,
+			search: searchQuery,
+		})
 	}, [limit, active, levelId, modalOpen])
 
 	const handleLimitChange = limit => {
@@ -167,7 +186,11 @@ export default function Cells() {
 					maxHeight: isMobile ? '80dvh' : 'none',
 				}}
 			>
-				<SearchInput onSearch={searchCell} initialValue={''} />
+				<SearchInput
+					onSearch={searchCell}
+					initialValue={''}
+					setSearch={setSearchQuery}
+				/>
 				<Box
 					style={{
 						display: 'flex',
@@ -180,7 +203,9 @@ export default function Cells() {
 							title={level.level}
 							id={levelId}
 							level={level.id}
-							onClick={() => setLevelId(level.id)}
+							onClick={() => {
+								setLevelId(levelId === level.id ? null : level.id)
+							}}
 						/>
 					))}
 				</Box>
