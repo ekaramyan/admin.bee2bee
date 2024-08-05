@@ -17,7 +17,7 @@ export default function useCells() {
 	const getCells = async ({ page, limit, active, level, search }) => {
 		setLoading(true)
 		setError(null)
-		const searchQuery = search ? `&search=${search}` : ''
+		const searchQuery = search ? `&search=${search.toLowerCase()}` : ''
 		const archivedQuery =
 			active !== (null || undefined)
 				? `&is_active=${active ? true : false}&is_archived=${

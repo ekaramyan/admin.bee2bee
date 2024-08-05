@@ -87,7 +87,7 @@ export default function Cells() {
 		limit = limit,
 		active = active,
 		level = level,
-		search = search,
+		search = searchQuery,
 	}) => {
 		try {
 			await getCells({
@@ -155,6 +155,11 @@ export default function Cells() {
 		const result = await closeCell(id, closeData)
 		result.isSuccess && setModalOpen(false)
 		refreshFetch(id)
+	}
+
+	const cellName = cell => {
+		const levelLetter = cell?.cellLevel.level.charAt()
+		return `${levelLetter}-#${cell?.id}`
 	}
 
 	return (
@@ -232,7 +237,7 @@ export default function Cells() {
 							{data?.data?.map((cell, index) => (
 								<Cell
 									key={cell?.id}
-									id={cell.id}
+									id={cellName(cell)}
 									consultant={cell.consultant}
 									leader={cell.leader}
 									cellUsers={cell.cellUsers}

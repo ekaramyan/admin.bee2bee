@@ -16,7 +16,7 @@ export default function useUsers() {
 		setError(null)
 		setSuccess(false)
 		console.log(search)
-		const searchQuery = search ? `&search=${search}` : ''
+		const searchQuery = search ? `&search=${search.toLowerCase()}` : ''
 		const url = `${apiUrl}/users?page=${page}&limit=${limit}&sort=${sort}${searchQuery}`
 
 		try {

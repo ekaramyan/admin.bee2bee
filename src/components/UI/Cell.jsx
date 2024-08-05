@@ -12,6 +12,7 @@ export default function Cell({
 }) {
 	const isMobile = useMediaQuery('@media(max-width: 1300px)')
 	const { firstName, lastName } = consultant
+
 	return (
 		<Box
 			style={{
@@ -41,7 +42,7 @@ export default function Cell({
 						gap: 10,
 					}}
 				>
-					<Typography variant='cell_user_item'>Cell #{id}</Typography>
+					<Typography variant='cell_user_item'>Cell {id}</Typography>
 					<Typography variant='cell_user_item' style={{ opacity: '.75' }}>
 						{firstName} {lastName}
 					</Typography>
