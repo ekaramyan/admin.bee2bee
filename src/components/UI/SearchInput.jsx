@@ -9,7 +9,7 @@ export default function SearchInput({ onSearch, initialValue, setSearch }) {
 
 	useEffect(() => {
 		const handler = setTimeout(() => {
-			onSearch({ search: debouncedValue })
+			onSearch({ search: debouncedValue, order: 'asc' })
 		}, 1000)
 
 		return () => {
@@ -18,7 +18,7 @@ export default function SearchInput({ onSearch, initialValue, setSearch }) {
 	}, [debouncedValue])
 	const handleKeyPress = e => {
 		if (e.key === 'Enter') {
-			onSearch({ search: value })
+			onSearch({ search: value, order: 'asc' })
 		}
 	}
 	const handleChange = e => {
@@ -36,7 +36,7 @@ export default function SearchInput({ onSearch, initialValue, setSearch }) {
 				value={value}
 			/>
 			<Button
-				onClick={() => onSearch({ search: value })}
+				onClick={() => onSearch({ search: value, order: 'asc' })}
 				variant='standard'
 				sx={{ height: '100%', color: '#FF5733', fontSize: 16 }}
 				size='large'

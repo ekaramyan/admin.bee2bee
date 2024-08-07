@@ -52,14 +52,14 @@ export default function Users({ header }) {
 		useUsers()
 
 	const fetchDataAsync = useCallback(
-		async ({ page: page, limit: limit, search: search }) => {
+		async ({ page: page, limit: limit, search: search, order }) => {
 			try {
 				const response = await (updateTable
-					? getUsers(page, limit, search, sorting)
+					? getUsers(page, limit, search, sorting, order)
 					: new Promise(resolve =>
 							setTimeout(
 								async () =>
-									resolve(await getUsers(page, limit, search, sorting)),
+									resolve(await getUsers(page, limit, search, sorting, order)),
 								1000
 							)
 					  ))
@@ -73,7 +73,12 @@ export default function Users({ header }) {
 	)
 
 	useEffect(() => {
-		fetchDataAsync({ page: page, limit: limit, search: searchQuery })
+		fetchDataAsync({
+			page: page,
+			limit: limit,
+			search: searchQuery,
+			order: 'desc',
+		})
 	}, [limit, updateTable, page, sorting])
 
 	useEffect(() => {
