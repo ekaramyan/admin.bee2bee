@@ -9,7 +9,7 @@ export default function SearchInput({ onSearch, initialValue, setSearch }) {
 
 	useEffect(() => {
 		const handler = setTimeout(() => {
-			onSearch({ search: debouncedValue, order: 'asc' })
+			debouncedValue ? onSearch({ search: debouncedValue, order: 'asc' }) : null
 		}, 1000)
 
 		return () => {

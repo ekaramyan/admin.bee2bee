@@ -15,7 +15,7 @@ export default function useUsers() {
 		limit = 100,
 		search = null,
 		sort,
-		order = 'asc'
+		order = 'desc'
 	) => {
 		setData(null)
 		setLoading(true)
@@ -32,7 +32,6 @@ export default function useUsers() {
 					Authorization: `Bearer ${token}`,
 				},
 			})
-			console.log(response)
 
 			if (response.status === 200) {
 				setSuccess(true)
