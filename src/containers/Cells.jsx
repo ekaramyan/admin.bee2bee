@@ -105,6 +105,9 @@ export default function Cells() {
 	}
 
 	const searchCell = async ({ page = 1, limit = 100, search = search }) => {
+		if (search) {
+			setLevelId(null)
+		}
 		await getCells({
 			page: page,
 			limit: limit,
@@ -237,7 +240,8 @@ export default function Cells() {
 							{data?.data?.map((cell, index) => (
 								<Cell
 									key={cell?.id}
-									id={cellName(cell)}
+									id={cell?.id}
+									cellId={cellName(cell)}
 									consultant={cell.consultant}
 									leader={cell.leader}
 									cellUsers={cell.cellUsers}
@@ -280,6 +284,7 @@ export default function Cells() {
 					isLoading={loading}
 					editCaL={editConsultantAndLeader}
 					consultants={consultants}
+					getConsultants={getConsultants}
 				/>
 			)}
 		</>

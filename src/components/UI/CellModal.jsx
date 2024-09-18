@@ -41,6 +41,7 @@ export default function CellModal({
 	closeCell,
 	editCaL,
 	consultants,
+	getConsultants,
 }) {
 	const trimmedFollowers = cellData.cellUsers.slice(0, 6)
 	const paddedFollowers = [
@@ -99,6 +100,10 @@ export default function CellModal({
 			[e.target.name]: e.target.value,
 		})
 		e.target.size = e.target.value.length || 1
+	}
+
+	if (!consultants) {
+		getConsultants(cellData.cellLevel.id)
 	}
 
 	const consultantName = consultants?.data?.find(
