@@ -17,7 +17,7 @@ export default function useCells() {
 	const getCells = async ({ page, limit, active, level, search }) => {
 		setLoading(true)
 		setError(null)
-		const searchQuery = search ? `&search=${search}` : ''
+		const searchQuery = search ? `&search=${search.toLowerCase()}` : ''
 		const archivedQuery =
 			active !== (null || undefined)
 				? `&is_active=${active ? true : false}&is_archived=${
@@ -25,8 +25,9 @@ export default function useCells() {
 				  }`
 				: ''
 		const levelQuery = level ? `&level_id=${level}` : ''
+		const orderQuery = active ? '&order=asc' : '&order=desc'
 
-		const url = `${apiUrl}/cells/v2/all/list?page=${page}&limit=${limit}${archivedQuery}${levelQuery}${searchQuery}`
+		const url = `${apiUrl}/cells/v2/all/list?page=${page}&limit=${limit}${archivedQuery}${levelQuery}${searchQuery}${orderQuery}`
 
 		try {
 			const response = await axios.get(url, {
